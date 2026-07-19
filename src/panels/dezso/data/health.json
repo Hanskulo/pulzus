@@ -1,16 +1,16 @@
 {
-  "generated_at": "2026-07-19T17:18:02+00:00",
+  "generated_at": "2026-07-19T18:22:02+00:00",
   "status": "green",
   "targets": [
     {
       "label": "StreamHub (Pages)",
       "up": true,
-      "latency_ms": 66
+      "latency_ms": 72
     },
     {
       "label": "StreamHub API (Worker)",
       "up": true,
-      "latency_ms": 72
+      "latency_ms": 63
     }
   ],
   "certs": [
