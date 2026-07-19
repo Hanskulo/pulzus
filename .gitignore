@@ -13,3 +13,4 @@ SELECTION.md
 **/CONCEPT.md
 **/README.md
 src/panels/dezso/data/gen-health-snapshot.py
+refresh-health.sh
