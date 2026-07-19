@@ -7,13 +7,30 @@
 (function () {
   "use strict";
 
-  // statusz -> szeizmikus jelleg (amplitudo-szorzo, scroll-sebesseg, tuske-eroossseg)
+  // statusz -> szeizmikus jelleg (amplitudo-szorzo, scroll-sebesseg, tuske-eroossseg) -- NYELVFUGGETLEN
   var SIG = {
-    green:   { amp: 0.16, speed: 34, spike: 0.55, label: "STABIL ÜZEM" },
-    amber:   { amp: 0.30, speed: 52, spike: 1.0,  label: "FIGYELMEZTETÉS" },
-    red:     { amp: 0.52, speed: 78, spike: 1.8,  label: "INCIDENS -- RIASZTÁS KIMENT" },
-    unknown: { amp: 0.10, speed: 20, spike: 0.2,  label: "NINCS REGISZTRÁLT JEL" }
+    green:   { amp: 0.16, speed: 34, spike: 0.55 },
+    amber:   { amp: 0.30, speed: 52, spike: 1.0 },
+    red:     { amp: 0.52, speed: 78, spike: 1.8 },
+    unknown: { amp: 0.10, speed: 20, spike: 0.2 }
   };
+
+  // JS-bol generalt LATHATO szoveg 3 nyelven. A statikus HTML-t a panel.{en,de}.html fordítja;
+  // ez a lookup gondoskodik rola, hogy elo adat betoltesekor is a helyes nyelvu szoveg keruljon ki.
+  // Nyelvet a <html lang> (build.py allitja) adja; fallback: hu.
+  var I18N = {
+    hu: { status: { green: "STABIL ÜZEM", amber: "FIGYELMEZTETÉS", red: "INCIDENS -- RIASZTÁS KIMENT", unknown: "NINCS REGISZTRÁLT JEL" },
+          rec: "regisztrálva: ", nosignal: "NINCS JEL", live: "élő", t: { s: " mp-e", m: " perce", h: " órája", d: " napja" } },
+    en: { status: { green: "STABLE OPERATION", amber: "WARNING", red: "INCIDENT -- ALERT SENT", unknown: "NO SIGNAL RECORDED" },
+          rec: "recorded: ", nosignal: "NO SIGNAL", live: "live", t: { s: "s ago", m: " min ago", h: "h ago", d: "d ago" } },
+    de: { status: { green: "STABILER BETRIEB", amber: "WARNUNG", red: "VORFALL -- ALARM GESENDET", unknown: "KEIN SIGNAL AUFGEZEICHNET" },
+          rec: "aufgezeichnet: ", nosignal: "KEIN SIGNAL", live: "live", t: { s: " Sek.", m: " Min.", h: " Std.", d: " Tg." } }
+  };
+  function langOf(rootEl) {
+    var el = rootEl.closest && rootEl.closest("[lang]");
+    var code = ((el && el.lang) || document.documentElement.lang || "hu").slice(0, 2).toLowerCase();
+    return I18N[code] ? code : "hu";
+  }
 
   // muszer-skalak (ertek -> a mutato tartomanya)
   var GAUGE = {
@@ -24,14 +41,14 @@
   function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
   function cssVar(el, n, f) { var v = getComputedStyle(el).getPropertyValue(n); return (v && v.trim()) || f; }
 
-  function relTime(iso) {
-    if (!iso) return "élő";
-    var t = Date.parse(iso); if (isNaN(t)) return "élő";
+  function relTime(iso, L) {
+    if (!iso) return L.live;
+    var t = Date.parse(iso); if (isNaN(t)) return L.live;
     var s = Math.max(0, Math.round((Date.now() - t) / 1000));
-    if (s < 60) return s + " mp-e";
-    if (s < 3600) return Math.round(s / 60) + " perce";
-    if (s < 86400) return Math.round(s / 3600) + " órája";
-    return Math.round(s / 86400) + " napja";
+    if (s < 60) return s + L.t.s;
+    if (s < 3600) return Math.round(s / 60) + L.t.m;
+    if (s < 86400) return Math.round(s / 3600) + L.t.h;
+    return Math.round(s / 86400) + L.t.d;
   }
 
   // --- muszer-skalajeloek egyszeri kirajzolasa (SVG tick-ek) ---
@@ -68,11 +85,12 @@
     var sig = SIG[status] || SIG.unknown;
     rootEl.setAttribute("data-status", status === "unknown" ? "amber" : status);
     rootEl._pdSig = sig;
+    var L = I18N[langOf(rootEl)];
 
     var stTxt = rootEl.querySelector('[data-role="status-text"]');
-    if (stTxt) stTxt.textContent = sig.label;
+    if (stTxt) stTxt.textContent = L.status[status];
     var gen = rootEl.querySelector('[data-role="generated"]');
-    if (gen) gen.textContent = "regisztrálva: " + relTime(data.generated_at);
+    if (gen) gen.textContent = L.rec + relTime(data.generated_at, L);
 
     var setNum = function (role, val) {
       var el = rootEl.querySelector('[data-role="' + role + '"]');
@@ -94,7 +112,7 @@
           name.className = "pd-log-name"; name.textContent = t.label || "ismeretlen";
           var dots = document.createElement("span"); dots.className = "pd-log-dots"; dots.setAttribute("aria-hidden", "true");
           var val = document.createElement("span"); val.className = "pd-log-val";
-          val.textContent = t.up ? ((t.latency_ms != null ? t.latency_ms : "?") + " ms") : "NINCS JEL";
+          val.textContent = t.up ? ((t.latency_ms != null ? t.latency_ms : "?") + " ms") : L.nosignal;
           li.appendChild(name); li.appendChild(dots); li.appendChild(val);
           ul.appendChild(li);
         });

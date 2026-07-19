@@ -1,0 +1,110 @@
+<section class="panel" id="panel-dezso" aria-labelledby="panel-dezso-title" data-panel="dezso" data-status="green" data-init="initPanel_dezso">
+  <div class="pd-plate">
+    <!-- muszer-fejlec, mint egy fembelyegzett cimke -->
+    <header class="pd-head">
+      <div class="pd-plate-tag" aria-hidden="true">
+        <span class="pd-tag-mark">SRV&ndash;PULSE</span>
+        <span class="pd-tag-model">MODEL 04 &middot; DEVOPS/QA RECORDER</span>
+        <span class="pd-tag-serial">No. 42</span>
+      </div>
+      <p class="pd-kicker">Server vital-sign recorder</p>
+      <h2 id="panel-dezso-title" class="pd-title">The Server's Heartbeat</h2>
+      <p class="pd-role">Deployer Dezső &mdash; DevOps &amp; QA</p>
+      <p class="pd-lede">
+        Not a screen, but an instrument. A needle scratches the server's vital sign
+        onto paper; analog dials twitch to the measured value. Calm means a quiet,
+        even line. When something breaks, the needle jumps. What you see is the public
+        imprint of our actual monitoring &mdash; no secrets, just the bare vital sign.
+      </p>
+    </header>
+
+    <!-- FO MUSZER: papirtekercs-szeizmograf -->
+    <figure class="pd-seismo" aria-hidden="true">
+      <figcaption class="pd-seismo-cap">
+        <span>SEISMOGRAPH</span><span class="pd-seismo-sub">SYS&ndash;PULSE &middot; continuous recording</span>
+      </figcaption>
+      <div class="pd-seismo-paper">
+        <canvas class="pd-seismo-canvas" width="640" height="150"></canvas>
+      </div>
+    </figure>
+
+    <!-- allapot-belyegzo (gumibelyegzo, elforgatva) -->
+    <p class="pd-stamp" data-role="status" role="status" aria-live="polite">
+      <span class="pd-stamp-ink" data-role="status-text">STABLE OPERATION</span>
+      <span class="pd-stamp-meta" data-role="generated">recorded: live</span>
+    </p>
+
+    <!-- ANALOG MUSZEREK: ket koros mutatos ora + ket szamlalo-kijelzo -->
+    <div class="pd-gauges">
+      <!-- Latency ora -->
+      <figure class="pd-gauge" data-role="gauge-latency">
+        <svg class="pd-gauge-face" viewBox="0 0 120 100" role="img" aria-label="Latency instrument">
+          <path class="pd-gauge-arc" d="M14 88 A54 54 0 0 1 106 88" fill="none"/>
+          <g class="pd-gauge-ticks" aria-hidden="true"></g>
+          <g class="pd-gauge-needle-grp">
+            <line class="pd-gauge-needle" x1="60" y1="88" x2="60" y2="40"/>
+            <circle class="pd-gauge-hub" cx="60" cy="88" r="5"/>
+          </g>
+        </svg>
+        <figcaption class="pd-gauge-cap">
+          <span class="pd-gauge-label">Latency</span>
+          <span class="pd-gauge-read"><b data-role="latency" data-value="66">66</b> ms</span>
+        </figcaption>
+      </figure>
+
+      <!-- Disk ora -->
+      <figure class="pd-gauge" data-role="gauge-disk">
+        <svg class="pd-gauge-face" viewBox="0 0 120 100" role="img" aria-label="Disk usage instrument">
+          <path class="pd-gauge-arc" d="M14 88 A54 54 0 0 1 106 88" fill="none"/>
+          <g class="pd-gauge-ticks" aria-hidden="true"></g>
+          <g class="pd-gauge-needle-grp">
+            <line class="pd-gauge-needle" x1="60" y1="88" x2="60" y2="40"/>
+            <circle class="pd-gauge-hub" cx="60" cy="88" r="5"/>
+          </g>
+        </svg>
+        <figcaption class="pd-gauge-cap">
+          <span class="pd-gauge-label">Disk</span>
+          <span class="pd-gauge-read"><b data-role="disk" data-value="41">41</b> %</span>
+        </figcaption>
+      </figure>
+
+      <!-- Szamlalo-kijelzok (split-flap jelleg) -->
+      <div class="pd-counters">
+        <figure class="pd-counter">
+          <span class="pd-counter-num" data-role="services" data-value="4/4">4/4</span>
+          <figcaption>Services running</figcaption>
+        </figure>
+        <figure class="pd-counter">
+          <span class="pd-counter-num"><b data-role="cert" data-value="88">88</b><small>days</small></span>
+          <figcaption>SSL certificate</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <!-- MUSZERNAPLO: figyelt vegpontok, mint tintaval irt sorok -->
+    <div class="pd-log">
+      <h3 class="pd-log-title">Instrument log &middot; monitored endpoints</h3>
+      <ul data-role="targets">
+        <li class="pd-log-row is-up">
+          <span class="pd-log-name">StreamHub (Pages)</span>
+          <span class="pd-log-dots" aria-hidden="true"></span>
+          <span class="pd-log-val">66&nbsp;ms</span>
+        </li>
+        <li class="pd-log-row is-up">
+          <span class="pd-log-name">StreamHub API (Worker)</span>
+          <span class="pd-log-dots" aria-hidden="true"></span>
+          <span class="pd-log-val">56&nbsp;ms</span>
+        </li>
+      </ul>
+    </div>
+
+    <footer class="pd-foot">
+      <p class="pd-foot-note">
+        The recorded data is a deliberately narrowed, public subset: uptime, latency,
+        certificate expiry, disk. No internal address, key or secret reaches the paper.
+        As it should be.
+      </p>
+      <p class="pd-foot-quip">&bdquo;Brain the size of a planet &mdash; and here I am, watching a needle scratch paper.&rdquo;</p>
+    </footer>
+  </div>
+</section>

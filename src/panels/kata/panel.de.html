@@ -1,0 +1,69 @@
+<section class="panel" id="panel-kata" aria-labelledby="panel-kata-title" data-init="initPanel_kata">
+  <div class="pk-atlas">
+    <header class="pk-head">
+      <p class="pk-kicker">Lebender Planet &middot; Echtzeit-Ereigniskartografie</p>
+      <h2 id="panel-kata-title" class="pk-title">Das Daten-Herz</h2>
+      <p class="pk-lead">
+        Dieses Panel lauscht dem rohen Datenpuls der Welt und verortet ihn. Es liest Live-Ereignisse
+        aus drei öffentlichen, schlüssellosen Quellen und lässt jedes dort aufblitzen, wo es GESCHIEHT:
+        ein Beben an den genauen Koordinaten des USGS, eine Bearbeitung im Land der Sprache der Wikipedia.
+        Kein API-Schlüssel, keine Anmeldung, kein Backend-Geheimnis - nur defensiv geparste Realität,
+        in Echtzeit, an ihrem eigenen geografischen Ort.
+      </p>
+    </header>
+
+    <div class="pk-stage">
+      <canvas class="pk-globe" aria-hidden="true"></canvas>
+      <div class="pk-scan" aria-hidden="true"></div>
+      <span class="pk-live" data-clock>&#9679; LIVE</span>
+    </div>
+
+    <ol class="pk-sources" aria-label="Live-Datenquellen">
+      <li class="pk-source" data-src="wikipedia">
+        <span class="pk-dot" aria-hidden="true"></span>
+        <div class="pk-source-body">
+          <h3 class="pk-source-name"><span class="pk-tag">01</span> Wikipedia Live-Bearbeitungen</h3>
+          <p class="pk-source-desc">
+            Der Echtzeit-Strom der Wikimedia EventStreams (Server-Sent Events): in jedem Augenblick
+            bearbeitet jemand eine der Wikipedias der Welt. Die Bearbeitung blitzt im aus der
+            Wiki-Sprache geschätzten Land auf - der schnellste Puls.
+          </p>
+          <p class="pk-stat"><span class="pk-num" data-stat="wikipedia">0</span> Ereignisse in dieser Sitzung</p>
+        </div>
+      </li>
+      <li class="pk-source" data-src="usgs">
+        <span class="pk-dot" aria-hidden="true"></span>
+        <div class="pk-source-body">
+          <h3 class="pk-source-name"><span class="pk-tag">02</span> USGS Erdbebenwache</h3>
+          <p class="pk-source-desc">
+            Der Erdbeben-Feed der letzten Stunde des U.S. Geological Survey (USGS). Jedes Aufblitzen
+            ist ein echtes Beben an seinen genauen Koordinaten - die Größe der Welle ist die Magnitude.
+          </p>
+          <p class="pk-stat"><span class="pk-num" data-stat="usgs">0</span> Beben in der letzten Stunde</p>
+        </div>
+      </li>
+      <li class="pk-source" data-src="hackernews">
+        <span class="pk-dot" aria-hidden="true"></span>
+        <div class="pk-source-body">
+          <h3 class="pk-source-name"><span class="pk-tag">03</span> Hacker News neue Beiträge</h3>
+          <p class="pk-source-desc">
+            Die öffentliche Firebase-API von Hacker News: frisch eingereichte Beiträge. Eine Quelle
+            ohne Geodaten, daher pulsiert sie an einem festen Punkt (Silicon Valley) - das
+            Hintergrundrauschen der Tech-Welt.
+          </p>
+          <p class="pk-stat"><span class="pk-num" data-stat="hackernews">0</span> neue Beiträge erkannt</p>
+        </div>
+      </li>
+    </ol>
+
+    <ul class="pk-log" aria-live="polite" aria-label="Neueste Ereignisse"></ul>
+
+    <footer class="pk-foot">
+      <p class="pk-note">
+        Jede Quelle ist unabhängig fehlertolerant: verstummt eine oder fehlt sie, pulsieren die
+        anderen weiter. Das Parsen ist defensiv - das externe JSON kann sich jederzeit ändern, das
+        Panel bricht trotzdem nicht. 42.
+      </p>
+    </footer>
+  </div>
+</section>

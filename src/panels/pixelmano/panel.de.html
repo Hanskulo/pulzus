@@ -1,0 +1,181 @@
+<section class="panel" id="panel-pixelmano" aria-labelledby="pixelmano-title" data-panel="pixelmano" data-init="initPanel_pixelmano">
+
+  <header class="ev-head">
+    <p class="ev-kicker">Frontend &middot; Pixelmanó</p>
+    <p class="ev-folio" aria-hidden="true">P / 03</p>
+    <h2 id="pixelmano-title" class="ev-title">Die lebende Leinwand</h2>
+    <p class="ev-lead">
+      Dieses Panel ist das Designsystem von Pulzus Műhely, und es <strong>dokumentiert sich selbst</strong>.
+      Jede Komponente zeigt ihr eigenes HTML, CSS und die verwendeten Design-Tokens. Mit dem
+      Theme-Regler färbst du das Ganze in Echtzeit um, und das System misst sofort den WCAG&nbsp;AA-Kontrast.
+      Design ist hier keine statische Dekoration, sondern lebendiges, prüfbares Material: stell eine
+      schlechte Farbe ein, und der große Titel verschmilzt vor deinen Augen mit dem Papier; korrigier
+      sie, und er schnappt gestochen scharf zurück.
+    </p>
+  </header>
+
+  <!-- ---- DAS EINE DING: Live-Kontrast-Test, der Titel verschwindet / kehrt zurück ---- -->
+  <figure class="ev-stage" role="group" aria-labelledby="ev-stage-label">
+    <figcaption id="ev-stage-label" class="ev-stage__label">Kontrast-Test &mdash; live</figcaption>
+    <p class="ev-display" data-display>LESBAR</p>
+    <p class="ev-verdict" aria-live="polite">
+      <span class="ev-verdict__ratio" data-verdict-ratio>—</span>
+      <span class="ev-verdict__word" data-verdict-word>—</span>
+      <span class="ev-verdict__hint">die Farbe des großen Titels = der Akzent; zieh den Regler und schau</span>
+    </p>
+  </figure>
+
+  <!-- ---- Theme-Regler: Schieberegler + WCAG-Messer -------------------------- -->
+  <div class="ev-controls" role="group" aria-labelledby="ev-controls-title">
+    <p id="ev-controls-title" class="ev-controls__title">Theme-Regler</p>
+
+    <div class="ev-control">
+      <label for="ev-hue">Akzent-Farbton</label>
+      <input type="range" id="ev-hue" class="ev-range" min="0" max="360" step="1" value="8"
+             aria-describedby="ev-hue-val" />
+      <output id="ev-hue-val" class="ev-control__val">8&deg;</output>
+    </div>
+
+    <div class="ev-control">
+      <label for="ev-light">Akzent-Helligkeit</label>
+      <input type="range" id="ev-light" class="ev-range" min="30" max="92" step="1" value="46"
+             aria-describedby="ev-light-val" />
+      <output id="ev-light-val" class="ev-control__val">46%</output>
+    </div>
+
+    <div class="ev-meters">
+      <div class="ev-meter">
+        <span class="ev-meter__label">Titel-Kontrast <em>(rohe Farbe &times; Papier)</em></span>
+        <span class="ev-meter__ratio" data-contrast="title">—</span>
+        <span class="ev-badge ev-badge--verdict" data-contrast-badge="title">AA</span>
+      </div>
+      <div class="ev-meter">
+        <span class="ev-meter__label">Button-Beschriftung <em>(geschützte Komponente)</em></span>
+        <span class="ev-meter__ratio" data-contrast="btn">—</span>
+        <span class="ev-badge ev-badge--verdict" data-contrast-badge="btn">AA</span>
+      </div>
+      <p class="ev-meters__note">
+        Für den großen Titel (large text) verlangt WCAG&nbsp;AA 3:1, für normale Beschriftung 4,5:1.
+        Der Titel ist die rohe Akzentfarbe: verschmilzt sie mit dem Papier, verschwindet sie. Der
+        Button dagegen wechselt klug zu Tinten- oder Papierschrift, um seine Lesbarkeit zu schützen
+        &mdash; das misst die zweite Zeile.
+      </p>
+      <button type="button" class="ev-btn ev-btn--ghost" data-action="reset-theme">
+        Zurücksetzen
+      </button>
+    </div>
+  </div>
+
+  <!-- ---- Komponenten-Galerie: jedes Muster dokumentiert sich selbst ------- -->
+  <div class="ev-gallery">
+
+    <!-- 1. Button -->
+    <article class="ev-specimen" data-specimen="button">
+      <p class="ev-specimen__index" aria-hidden="true">01</p>
+      <div class="ev-specimen__stage">
+        <button type="button" class="ev-btn">Puls starten</button>
+        <button type="button" class="ev-btn ev-btn--ghost">Abbrechen</button>
+      </div>
+      <h3 class="ev-specimen__name">Button <span class="ev-specimen__tag">.ev-btn</span></h3>
+      <p class="ev-specimen__desc">
+        Primär- und "Ghost"-Variante. Das System wählt die Schriftfarbe gegen den Akzent (Tinte oder
+        Papier), damit AA erhalten bleibt. Fokusring für die Tastatur inklusive.
+      </p>
+      <ul class="ev-tokenlist" aria-label="Verwendete Design-Tokens">
+        <li><code>--ev-accent</code></li>
+        <li><code>--ev-btn-fg</code></li>
+        <li><code>--ev-ink</code></li>
+        <li><code>--ev-line</code></li>
+      </ul>
+      <button type="button" class="ev-code-toggle" aria-expanded="false"
+              data-code-for="button">Code zeigen</button>
+      <pre class="ev-code" data-code="button" hidden><code>&lt;button class="ev-btn"&gt;Puls starten&lt;/button&gt;
+
+.ev-btn {
+  background: var(--ev-accent);
+  color: var(--ev-btn-fg);   /* JS wählt den kontrastreicheren */
+  border: 2px solid var(--ev-ink);
+  padding: 0.55rem 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.ev-btn:hover { transform: translateY(-2px); }</code></pre>
+    </article>
+
+    <!-- 2. Karte -->
+    <article class="ev-specimen" data-specimen="card">
+      <p class="ev-specimen__index" aria-hidden="true">02</p>
+      <div class="ev-specimen__stage">
+        <div class="ev-card-demo">
+          <p class="ev-card-demo__kicker">Komponente</p>
+          <p class="ev-card-demo__title">Editorial-Karte</p>
+          <p class="ev-card-demo__body">Dünne Linien, Typo-Hierarchie, ein einziges Akzentzeichen.</p>
+        </div>
+      </div>
+      <h3 class="ev-specimen__name">Karte <span class="ev-specimen__tag">.ev-card-demo</span></h3>
+      <p class="ev-specimen__desc">
+        Eine Papierfläche mit präzisem Haarlinien-Rahmen und starker typografischer Hierarchie. Die
+        Tiefe entsteht aus Rhythmus und Kontrast, nicht aus weichem Schatten.
+      </p>
+      <ul class="ev-tokenlist" aria-label="Verwendete Design-Tokens">
+        <li><code>--ev-paper</code></li>
+        <li><code>--ev-line</code></li>
+        <li><code>--ev-accent</code></li>
+        <li><code>--ev-ink-soft</code></li>
+      </ul>
+      <button type="button" class="ev-code-toggle" aria-expanded="false"
+              data-code-for="card">Code zeigen</button>
+      <pre class="ev-code" data-code="card" hidden><code>&lt;div class="ev-card-demo"&gt;...&lt;/div&gt;
+
+.ev-card-demo {
+  background: var(--ev-paper);
+  border: 1px solid var(--ev-line);
+  border-top: 4px solid var(--ev-accent);
+  padding: 1.1rem;
+}</code></pre>
+    </article>
+
+    <!-- 3. Badge + Toast -->
+    <article class="ev-specimen" data-specimen="badge">
+      <p class="ev-specimen__index" aria-hidden="true">03</p>
+      <div class="ev-specimen__stage">
+        <span class="ev-badge">42 Skills</span>
+        <span class="ev-badge ev-badge--ok">Live</span>
+        <span class="ev-badge ev-badge--line">Beta</span>
+        <div class="ev-toast-demo" role="status">
+          <span class="ev-toast-demo__dot" aria-hidden="true"></span>
+          Keine Panik. Der Build lief durch.
+        </div>
+      </div>
+      <h3 class="ev-specimen__name">Badge &amp; Toast <span class="ev-specimen__tag">.ev-badge</span></h3>
+      <p class="ev-specimen__desc">
+        Status-Tags und ein dezenter Toast, in editorialem Rhythmus. Die Bedeutung trägt Form und
+        Beschriftung, nicht nur Farbe &mdash; so bleibt es auch bei Farbenblindheit lesbar.
+      </p>
+      <ul class="ev-tokenlist" aria-label="Verwendete Design-Tokens">
+        <li><code>--ev-ink</code></li>
+        <li><code>--ev-line</code></li>
+        <li><code>--ev-accent</code></li>
+        <li><code>--ev-paper-2</code></li>
+      </ul>
+      <button type="button" class="ev-code-toggle" aria-expanded="false"
+              data-code-for="badge">Code zeigen</button>
+      <pre class="ev-code" data-code="badge" hidden><code>&lt;span class="ev-badge ev-badge--ok"&gt;Live&lt;/span&gt;
+
+.ev-badge {
+  border: 1.5px solid var(--ev-ink);
+  padding: 2px 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.7rem;
+}
+.ev-badge--ok::before { content: "●"; color: var(--ev-accent); }</code></pre>
+    </article>
+
+  </div>
+
+  <p class="ev-footnote">
+    Frontend: Pixelmanó. Vanilla HTML/CSS/JS, ohne Framework.
+    "Der Buchstabe, der verschwindet" &mdash; Kontrast ist hier keine Zahl, sondern ein Ereignis.
+  </p>
+</section>

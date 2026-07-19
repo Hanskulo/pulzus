@@ -38,6 +38,8 @@
     return (hi + 0.05) / (lo + 0.05);
   }
   function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+  // Nyelv-lookup a JS-generalt fix szovegekhez (a <html lang>-bol, amit a build.py allit; fallback hu).
+  function L(hu, en, de) { var l = (document.documentElement.lang || "hu").slice(0, 2); return l === "en" ? en : (l === "de" ? de : hu); }
 
   /* ---- Init ------------------------------------------------------------ */
   window.initPanel_pixelmano = function initPanel_pixelmano(rootEl) {
@@ -66,7 +68,8 @@
         var open = pre.hasAttribute("hidden");
         if (open) { pre.removeAttribute("hidden"); } else { pre.setAttribute("hidden", ""); }
         btn.setAttribute("aria-expanded", String(open));
-        btn.textContent = open ? "Kód elrejtése" : "Kód megmutatása";
+        btn.textContent = open ? L("Kód elrejtése", "Hide code", "Code verbergen")
+                               : L("Kód megmutatása", "Show code", "Code zeigen");
       });
     });
 
@@ -89,8 +92,8 @@
       badge.setAttribute("data-state", pass ? "pass" : "fail");
       badge.textContent = pass ? "AA ✓" : "AA ✗";
       badge.setAttribute("title",
-        pass ? "Megfelel a WCAG AA-nak (>= " + lvl + ")"
-             : "Nem éri el a WCAG AA szintet (" + lvl + ")");
+        pass ? L("Megfelel a WCAG AA-nak (>= ", "Meets WCAG AA (>= ", "Erfüllt WCAG AA (>= ") + lvl + ")"
+             : L("Nem éri el a WCAG AA szintet (", "Below WCAG AA (", "Unter WCAG AA (") + lvl + ")");
     }
 
     function apply() {
@@ -122,9 +125,9 @@
 
       // Verdikt (a cím állapota)
       var word, state;
-      if (titleC >= 4.5) { word = "ÉLES"; state = "crisp"; }
-      else if (titleC >= 3.0) { word = "OLVASHATÓ"; state = "large"; }
-      else { word = "ELTŰNIK"; state = "gone"; }
+      if (titleC >= 4.5) { word = L("ÉLES", "CRISP", "SCHARF"); state = "crisp"; }
+      else if (titleC >= 3.0) { word = L("OLVASHATÓ", "READABLE", "LESBAR"); state = "large"; }
+      else { word = L("ELTŰNIK", "VANISHING", "VERSCHWINDET"); state = "gone"; }
       if (vRatio) vRatio.textContent = titleC.toFixed(2) + ":1";
       if (vWord) { vWord.textContent = word; vWord.setAttribute("data-state", state); }
 

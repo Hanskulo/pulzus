@@ -87,6 +87,8 @@
     catch (e) { return fb; }
   }
   function truncate(s, n) { s = String(s == null ? "" : s); return s.length > n ? s.slice(0, n - 1) + "…" : s; }
+  // Nyelv-lookup a JS-generalt fix szovegekhez (a <html lang>-bol, amit a build.py allit; fallback hu).
+  function L(hu, en, de) { var l = (document.documentElement.lang || "hu").slice(0, 2); return l === "en" ? en : (l === "de" ? de : hu); }
   function langOf(server) {
     if (!server) return null;
     var m = String(server).split(".");
@@ -272,7 +274,7 @@
             var coords = Array.isArray(g.coordinates) ? g.coordinates : [];
             var lon = coords.length ? coords[0] : null, lat = coords.length ? coords[1] : null;
             var mag = typeof p.mag === "number" ? p.mag : 1;
-            src.event(Date.now(), "M" + mag.toFixed(1), "M" + mag.toFixed(1) + " · " + (p.place || "ismeretlen hely"));
+            src.event(Date.now(), "M" + mag.toFixed(1), "M" + mag.toFixed(1) + " · " + (p.place || L("ismeretlen hely","unknown location","unbekannter Ort")));
             map.add("usgs", lon, lat, clamp(mag / 4, 0.4, 1.5));
           });
         })
@@ -298,10 +300,10 @@
             fetch("https://hacker-news.firebaseio.com/v0/item/" + id + ".json", { signal: signal, cache: "no-store" })
               .then(function (r) { return r.ok ? r.json() : null; })
               .then(function (item) {
-                src.event(Date.now(), "HN", (item && item.title) ? item.title : "új történet");
+                src.event(Date.now(), "HN", (item && item.title) ? item.title : L("új történet","new story","neuer Beitrag"));
                 map.add("hackernews", HN_GEO[0], HN_GEO[1], 0.6);
               })
-              .catch(function () { src.event(Date.now(), "HN", "új történet"); map.add("hackernews", HN_GEO[0], HN_GEO[1], 0.5); });
+              .catch(function () { src.event(Date.now(), "HN", L("új történet","new story","neuer Beitrag")); map.add("hackernews", HN_GEO[0], HN_GEO[1], 0.5); });
           });
         })
         .catch(function () { if (!(signal && signal.aborted)) src.setStatus("error"); });
