@@ -1,0 +1,119 @@
+/* Az Adatszív — Kata panel. "ÉLŐ BOLYGÓ" identitás.
+   Absztrakt planiszféra ponthálóval; az események a valós földrajzi helyükön fodrozódnak.
+   Minden szabály #panel-kata alá scope-olva. Sötét, kozmikus, kartografikus világ. */
+
+#panel-kata {
+  --pk-void:   #05070d;
+  --pk-void-2: #080c16;
+  --pk-grid:   rgba(120, 200, 220, 0.16);
+  --pk-ink:    #e6f2f6;
+  --pk-muted:  #8fa6b4;
+  --pk-cyan:   #4fd6e8;   /* wikipedia / alap-akcent */
+  --pk-coral:  #ff7a63;   /* usgs földrengés */
+  --pk-violet: #9d8cff;   /* hacker news */
+
+  color: var(--pk-ink);
+  background-color: var(--pk-void);
+  background-image:
+    radial-gradient(120% 80% at 50% -10%, rgba(79,214,232,0.10), transparent 55%),
+    radial-gradient(80% 70% at 100% 110%, rgba(157,140,255,0.10), transparent 55%),
+    linear-gradient(180deg, var(--pk-void-2), var(--pk-void));
+  border: 1px solid rgba(79,214,232,0.18);
+  padding: clamp(1.5rem, 3.2vw, 2.4rem);
+  font-family: var(--pm-font-sans, ui-sans-serif, system-ui, sans-serif);
+}
+
+#panel-kata .pk-head { margin: 0 0 1.2rem; }
+#panel-kata .pk-kicker {
+  font-family: var(--pm-font-mono, ui-monospace, monospace);
+  font-size: .7rem; letter-spacing: .22em; text-transform: uppercase;
+  color: var(--pk-cyan); margin: 0 0 .5rem;
+}
+#panel-kata .pk-title {
+  font-family: var(--pm-font-sans, system-ui, sans-serif);
+  font-size: clamp(1.9rem, 4.4vw, 2.7rem); font-weight: 800; letter-spacing: -.02em;
+  line-height: 1; margin: 0 0 .6rem; color: var(--pk-ink);
+}
+#panel-kata .pk-lead { color: var(--pk-muted); margin: 0; max-width: 60ch; font-size: 1.02rem; }
+
+/* --- Térkép-színpad --- */
+#panel-kata .pk-stage {
+  position: relative; margin: 1.2rem 0;
+  aspect-ratio: 2 / 1; width: 100%;
+  border: 1px solid var(--pk-grid); border-radius: 14px;
+  background:
+    radial-gradient(120% 120% at 50% 50%, rgba(10,18,30,0.2), rgba(4,6,12,0.6));
+  overflow: hidden;
+  box-shadow: inset 0 0 60px rgba(0,0,0,0.6);
+}
+#panel-kata .pk-globe { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+/* lassan söprő letapogató-fény, mint egy radar/műhold-pászta */
+#panel-kata .pk-scan {
+  position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(90deg, transparent 0%, rgba(79,214,232,0.06) 48%, rgba(79,214,232,0.14) 50%, transparent 52%);
+  mix-blend-mode: screen;
+  animation: pk-sweep 9s linear infinite;
+}
+@keyframes pk-sweep { 0% { transform: translateX(-60%); } 100% { transform: translateX(160%); } }
+#panel-kata .pk-live {
+  position: absolute; top: 10px; right: 12px;
+  font-family: var(--pm-font-mono, monospace); font-size: .62rem; letter-spacing: .18em;
+  color: var(--pk-cyan); opacity: .85;
+}
+
+/* --- Forrás-legenda --- */
+#panel-kata .pk-sources { list-style: none; margin: 0 0 1.1rem; padding: 0; display: grid; gap: .7rem; }
+#panel-kata .pk-source { display: grid; grid-template-columns: auto 1fr; gap: .7rem; align-items: start; }
+#panel-kata .pk-dot {
+  width: 11px; height: 11px; margin-top: .35rem; border-radius: 50%;
+  background: var(--pk-muted); box-shadow: 0 0 0 0 transparent; transition: box-shadow .3s;
+}
+#panel-kata .pk-source[data-src="wikipedia"] .pk-dot { background: var(--pk-cyan); }
+#panel-kata .pk-source[data-src="usgs"] .pk-dot { background: var(--pk-coral); }
+#panel-kata .pk-source[data-src="hackernews"] .pk-dot { background: var(--pk-violet); }
+#panel-kata .pk-source.is-live .pk-dot { box-shadow: 0 0 12px 1px currentColor; }
+#panel-kata .pk-source[data-src="wikipedia"].is-live .pk-dot { color: var(--pk-cyan); }
+#panel-kata .pk-source[data-src="usgs"].is-live .pk-dot { color: var(--pk-coral); }
+#panel-kata .pk-source[data-src="hackernews"].is-live .pk-dot { color: var(--pk-violet); }
+#panel-kata .pk-source.is-silent .pk-dot { opacity: .4; box-shadow: none; }
+
+#panel-kata .pk-source-name {
+  margin: 0 0 .2rem; font-size: .96rem; font-weight: 700; color: var(--pk-ink);
+  display: flex; align-items: baseline; gap: .5rem;
+}
+#panel-kata .pk-tag {
+  font-family: var(--pm-font-mono, monospace); font-size: .62rem; letter-spacing: .1em;
+  color: var(--pk-cyan); border: 1px solid var(--pk-grid); border-radius: 4px; padding: 0 .3rem;
+}
+#panel-kata .pk-source-desc { margin: 0 0 .25rem; color: var(--pk-muted); font-size: .86rem; max-width: 56ch; }
+#panel-kata .pk-stat { margin: 0; font-size: .8rem; color: var(--pk-muted); }
+#panel-kata .pk-num {
+  font-family: var(--pm-font-mono, monospace); font-weight: 700; color: var(--pk-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- Élő napló --- */
+#panel-kata .pk-log {
+  list-style: none; margin: 0 0 1rem; padding: 0;
+  font-family: var(--pm-font-mono, ui-monospace, monospace); font-size: .76rem;
+  display: grid; gap: .28rem; min-height: 1.2rem;
+}
+#panel-kata .pk-log li {
+  color: var(--pk-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  padding-left: 4.6rem; position: relative; animation: pk-logfade .5s ease;
+}
+#panel-kata .pk-log li::before {
+  content: attr(data-geo); position: absolute; left: 0; color: var(--pk-cyan);
+  font-variant-numeric: tabular-nums;
+}
+#panel-kata .pk-log li[data-src="usgs"]::before { color: var(--pk-coral); }
+#panel-kata .pk-log li[data-src="hackernews"]::before { color: var(--pk-violet); }
+@keyframes pk-logfade { from { opacity: 0; transform: translateY(-3px); } to { opacity: 1; transform: none; } }
+
+#panel-kata .pk-foot { border-top: 1px solid var(--pk-grid); padding-top: .9rem; }
+#panel-kata .pk-note { margin: 0; font-size: .78rem; color: var(--pk-muted); max-width: 66ch; }
+
+@media (prefers-reduced-motion: reduce) {
+  #panel-kata .pk-scan { animation: none; opacity: .4; }
+  #panel-kata .pk-log li { animation: none; }
+}

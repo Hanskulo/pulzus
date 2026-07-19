@@ -1,0 +1,137 @@
+/* Pulzus Műhely — base + layout.
+   A design-token alapot Pixelmanó adja (panels/pixelmano/tokens.css),
+   Berci ezt emeli ide integrációkor. Addig ez a józan default. */
+
+:root {
+  /* Az egész oldal Pixelmanó közös --pm-* baseline-jára épül (tokens.css elöl töltődik).
+     Itt csak aliasokat adunk a shell + Berci-panel régi neveihez, hogy egységes legyen.
+     Fallback-értékek arra az esetre, ha a tokens.css nem töltődne be. */
+  --bg:            var(--pm-bg,       #0a0e14);
+  --bg-soft:       var(--pm-bg-elev,  #0f1520);
+  --bg-panel:      var(--pm-surface,  #121a27);
+  --ink:           var(--pm-text,     #e7edf5);
+  --ink-soft:      var(--pm-text-muted,#9fb0c6);
+  --ink-dim:       var(--pm-text-faint,#64748b);
+  --line:          var(--pm-border,   #1e293b);
+
+  --pulse:         var(--pm-accent,   #35e0c8); /* menta-cián pulzus */
+  --pulse-2:       var(--pm-accent-3, #c4b0f0); /* halvány viola */
+  --ember:         var(--pm-warn,     #ffce54);
+  --good:          var(--pm-ok,       #48d597);
+  --warn:          var(--pm-warn,     #ffce54);
+  --bad:           var(--pm-danger,   #ff5c72);
+
+  --font-display:  var(--pm-font-sans, ui-sans-serif, system-ui, sans-serif);
+  --font-body:     var(--pm-font-sans, ui-sans-serif, system-ui, sans-serif);
+  --font-mono:     var(--pm-font-mono, ui-monospace, monospace);
+
+  --maxw:          1120px;
+  --radius:        var(--pm-radius-lg, 16px);
+  --gap:           clamp(1rem, 2.5vw, 2rem);
+  --pulse-rate:    var(--pm-pulse-duration, 2.6s); /* közös szívverés */
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(1200px 600px at 50% -10%, rgba(53,224,200,.10), transparent 60%),
+    radial-gradient(900px 500px at 90% 10%, rgba(89,167,255,.08), transparent 55%),
+    var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--pulse); text-decoration-color: color-mix(in srgb, var(--pulse) 45%, transparent); text-underline-offset: 3px; }
+a:hover { color: color-mix(in srgb, var(--pulse) 80%, white); }
+
+:focus-visible { outline: 2px solid var(--pulse); outline-offset: 3px; border-radius: 4px; }
+
+.skip-link {
+  position: absolute; left: -999px; top: 0; z-index: 100;
+  background: var(--pulse); color: #04120f; padding: .6rem 1rem; border-radius: 0 0 10px 0; font-weight: 600;
+}
+.skip-link:focus { left: 0; }
+
+/* ---------- HERO ---------- */
+.hero { padding: clamp(3rem, 9vw, 7rem) var(--gap) clamp(2rem, 5vw, 4rem); }
+.hero__inner { max-width: var(--maxw); margin: 0 auto; text-align: center; }
+.hero__eyebrow {
+  font-family: var(--font-mono); font-size: .8rem; letter-spacing: .22em; text-transform: uppercase;
+  color: var(--pulse); margin: 0 0 1rem;
+}
+.hero__title {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 12vw, 7.5rem); line-height: .95; margin: 0; font-weight: 800; letter-spacing: -.02em;
+  background: linear-gradient(180deg, var(--ink), color-mix(in srgb, var(--pulse) 60%, var(--ink)));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  text-wrap: balance;
+}
+.hero__lead {
+  max-width: 62ch; margin: 1.6rem auto 0; font-size: clamp(1.05rem, 2.2vw, 1.35rem); color: var(--ink-soft);
+  text-wrap: pretty;
+}
+.hero__lead em { color: var(--ink); font-style: normal; border-bottom: 2px solid var(--pulse); }
+.hero__pulse { display: block; width: 100%; height: auto; max-height: 200px; margin: 2rem auto 1rem; }
+.hero__meta { font-family: var(--font-mono); font-size: .82rem; color: var(--ink-dim); }
+
+.dot { display: inline-block; width: .6em; height: .6em; border-radius: 50%; background: var(--ink-dim); vertical-align: middle; }
+.dot--live { background: var(--good); box-shadow: 0 0 0 0 color-mix(in srgb, var(--good) 70%, transparent); animation: ping var(--pulse-rate) ease-out infinite; }
+@keyframes ping {
+  0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--good) 70%, transparent); }
+  70%,100% { box-shadow: 0 0 0 10px transparent; }
+}
+@media (prefers-reduced-motion: reduce) { .dot--live { animation: none; } }
+
+/* ---------- PANELS ---------- */
+main {
+  max-width: var(--maxw); margin: 0 auto; padding: 0 var(--gap) clamp(3rem, 8vw, 6rem);
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 460px), 1fr)); gap: var(--gap);
+  align-items: start; /* minden panel a saját természetes magasságát kapja -- nincs egyenlő-magasság-nyújtás */
+}
+/* MINIMÁLIS alap: csak a grid-elhelyezés + biztonsági overflow.
+   Csaba kérése (2026-07-17): minden panel SAJÁT, egyedi vizuális világot kap,
+   ezért a keretet/hátteret/tipográfiát a panel maga festi a #panel-<slug> scope-jában.
+   Itt szándékosan NINCS közös háttér/keret/akcent-vonal. */
+.panel {
+  position: relative; overflow: hidden;
+  border-radius: var(--radius); /* egységes lekerekítés a grid rendezettségéért; a panel felülírhatja */
+  min-height: 280px;
+}
+/* A régi placeholder-alapstílusok (title/by/desc) fallbackként megmaradnak lentebb,
+   de az éles paneleK a saját markupjukat + stílusukat hozzák. */
+.panel__title { font-family: var(--font-display); font-size: clamp(1.5rem, 3.5vw, 2.1rem); margin: 0 0 .2rem; letter-spacing: -.01em; }
+.panel__by { font-family: var(--font-mono); font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; color: var(--pulse-2); margin: 0 0 1rem; }
+.panel__desc { color: var(--ink-soft); margin: 0; max-width: 54ch; }
+.panel--placeholder { border-style: dashed; }
+
+/* ---------- AI KÉZFOGÁS ---------- */
+.handshake {
+  grid-column: 1 / -1;
+  background:
+    radial-gradient(600px 300px at 100% 0%, rgba(89,167,255,.12), transparent 60%),
+    var(--bg-soft);
+  border: 1px solid var(--line); border-radius: var(--radius);
+  padding: clamp(1.6rem, 4vw, 3rem);
+}
+.handshake__title { font-family: var(--font-display); font-size: clamp(1.6rem, 4vw, 2.4rem); margin: 0 0 .8rem; }
+.handshake__lead { color: var(--ink-soft); max-width: 70ch; margin: 0 0 1.2rem; font-size: 1.08rem; }
+.handshake__facts { list-style: none; padding: 0; margin: 0 0 1.2rem; display: grid; gap: .6rem; max-width: 78ch; }
+.handshake__facts li { padding-left: 1.2rem; position: relative; color: var(--ink-soft); }
+.handshake__facts li::before { content: "▸"; position: absolute; left: 0; color: var(--pulse); }
+.handshake__facts strong { color: var(--ink); }
+.handshake__note { font-family: var(--font-mono); font-size: .86rem; color: var(--ink-dim); max-width: 70ch; }
+
+/* ---------- FOOTER ---------- */
+.site-footer {
+  max-width: var(--maxw); margin: 0 auto; padding: 2rem var(--gap) 4rem;
+  border-top: 1px solid var(--line); text-align: center; color: var(--ink-dim); font-size: .9rem;
+}
+.site-footer strong { color: var(--pulse); }
+.site-footer__sub { font-family: var(--font-mono); margin: .3rem 0 0; letter-spacing: .1em; }

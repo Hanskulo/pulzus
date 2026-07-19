@@ -1,0 +1,3 @@
+# lokalis teszt-harness es ideiglenes teszt-snapshotok (nem a leadott panel resze)
+_test-*.html
+data/health-*.json

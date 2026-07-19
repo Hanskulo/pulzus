@@ -1,0 +1,102 @@
+/* =========================================================================
+   Pulzus Műhely — közös design-token alap  (Pixelmanó / "Az Élő Vászon")
+   -------------------------------------------------------------------------
+   Ez a stúdió vizuális baseline-ja. Berci ezt emeli a globális
+   src/style.css :root-jába. Minden szín HSL-csatornákra bontva, hogy
+   a téma-csúszkák (és a pulzus) valós időben, olcsón hangolhassák.
+
+   Konvenció: minden token prefixe --pm- (Pulzus Műhely), hogy ne
+   ütközzön semmilyen panel-lokális változóval.
+   ========================================================================= */
+
+:root {
+  color-scheme: dark;
+
+  /* ---- Szín-primitívek: HSL-csatornák (a téma ezeket írja felül) ------ */
+  --pm-bg-h: 218; --pm-bg-s: 32%; --pm-bg-l: 6%;      /* mély kék-tinta */
+  --pm-accent-h: 168; --pm-accent-s: 64%; --pm-accent-l: 66%;   /* menta-cián pulzus */
+  --pm-accent2-h: 322; --pm-accent2-s: 68%; --pm-accent2-l: 78%; /* pasztell magenta */
+  --pm-accent3-h: 258; --pm-accent3-s: 70%; --pm-accent3-l: 80%; /* halvány viola */
+
+  /* ---- Szemantikus felületek ---------------------------------------- */
+  --pm-bg:          hsl(var(--pm-bg-h) var(--pm-bg-s) var(--pm-bg-l));
+  --pm-bg-elev:     hsl(var(--pm-bg-h) calc(var(--pm-bg-s) - 4%) calc(var(--pm-bg-l) + 4%));
+  --pm-surface:     hsl(var(--pm-bg-h) 24% 10%);
+  --pm-surface-2:   hsl(var(--pm-bg-h) 22% 14%);
+  --pm-surface-3:   hsl(var(--pm-bg-h) 20% 18%);
+  --pm-border:      hsl(var(--pm-bg-h) 18% 24%);
+  --pm-border-soft: hsl(var(--pm-bg-h) 16% 18%);
+
+  /* ---- Szöveg -------------------------------------------------------- */
+  --pm-text:        hsl(210 26% 93%);
+  --pm-text-muted:  hsl(212 15% 64%);
+  --pm-text-faint:  hsl(214 12% 46%);
+
+  /* ---- Akcentek + kontraszt-biztos "ink" (szöveg az akcenten) -------- */
+  --pm-accent:      hsl(var(--pm-accent-h) var(--pm-accent-s) var(--pm-accent-l));
+  --pm-accent-2:    hsl(var(--pm-accent2-h) var(--pm-accent2-s) var(--pm-accent2-l));
+  --pm-accent-3:    hsl(var(--pm-accent3-h) var(--pm-accent3-s) var(--pm-accent3-l));
+  --pm-accent-dim:  hsl(var(--pm-accent-h) calc(var(--pm-accent-s) - 20%) 24%);
+  --pm-accent-ink:  hsl(var(--pm-accent-h) 60% 8%);   /* sötét szöveg világos akcenten */
+
+  /* ---- Állapotszínek ------------------------------------------------- */
+  --pm-ok:     hsl(150 56% 62%);
+  --pm-warn:   hsl(40 85% 66%);
+  --pm-danger: hsl(2 74% 70%);
+
+  /* ---- Tipográfia ---------------------------------------------------- */
+  --pm-font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --pm-font-mono: "JetBrains Mono", "Fira Code", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  /* Moduláris skála (1.2 ~ minor third), rem-alapon, fluid a hero felé */
+  --pm-fs-xs:  0.75rem;
+  --pm-fs-sm:  0.875rem;
+  --pm-fs-md:  1rem;
+  --pm-fs-lg:  1.25rem;
+  --pm-fs-xl:  clamp(1.5rem, 1.2rem + 1.4vw, 2rem);
+  --pm-fs-2xl: clamp(2rem, 1.5rem + 2.6vw, 3rem);
+
+  --pm-lh-tight: 1.2;
+  --pm-lh-base:  1.6;
+
+  /* ---- Térköz-skála (4px alap) -------------------------------------- */
+  --pm-sp-1: 0.25rem;
+  --pm-sp-2: 0.5rem;
+  --pm-sp-3: 0.75rem;
+  --pm-sp-4: 1rem;
+  --pm-sp-5: 1.5rem;
+  --pm-sp-6: 2rem;
+  --pm-sp-7: 3rem;
+  --pm-sp-8: 4rem;
+
+  /* ---- Sugarak ------------------------------------------------------- */
+  --pm-radius-sm: 6px;
+  --pm-radius-md: 10px;
+  --pm-radius-lg: 16px;
+  --pm-radius-pill: 999px;
+
+  /* ---- Árnyék / ragyogás -------------------------------------------- */
+  --pm-shadow-1: 0 1px 2px hsl(var(--pm-bg-h) 40% 2% / 0.5);
+  --pm-shadow-2: 0 8px 24px hsl(var(--pm-bg-h) 45% 2% / 0.55);
+  --pm-glow: 0 0 0 1px hsl(var(--pm-accent-h) var(--pm-accent-s) var(--pm-accent-l) / 0.35),
+             0 0 28px -6px hsl(var(--pm-accent-h) var(--pm-accent-s) var(--pm-accent-l) / 0.45);
+
+  /* ---- Mozgás -------------------------------------------------------- */
+  --pm-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --pm-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --pm-dur-fast: 140ms;
+  --pm-dur-med:  260ms;
+  --pm-dur-slow: 520ms;
+
+  /* ---- Pulzus (vezérmotívum) ---------------------------------------- */
+  /* A közös szívverés. Nyugalomban ~58 BPM; a --pm-pulse-bpm-et az
+     app.js hangolhatja aktivitás szerint. A duration ebből származik. */
+  --pm-pulse-bpm: 58;
+  --pm-pulse-duration: calc(60s / var(--pm-pulse-bpm));
+}
+
+/* Mozgáscsökkentés: a pulzus lassul és halkul, nem áll le teljesen,
+   hogy a "él" érzet megmaradjon, de ne legyen vesztibuláris teher. */
+@media (prefers-reduced-motion: reduce) {
+  :root { --pm-pulse-bpm: 40; }
+}

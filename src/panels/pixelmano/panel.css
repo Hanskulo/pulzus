@@ -1,0 +1,492 @@
+/* =========================================================================
+   Panel: Az Élő Vászon (#panel-pixelmano) — Frontend / Pixelmanó
+   KONCEPCIÓ: C) "A Betű, Ami Eltűnik" — kinetikus-brutalista editorial tipó.
+   A WCAG-kontraszt átélt esemény: a nagy display-cím (nyers akcent-szín)
+   beleolvad a papírba, ha alácsúszol az AA-nak; javításra élesre pattan.
+   -------------------------------------------------------------------------
+   Integrációs szerződés: MINDEN szabály a #panel-pixelmano alá scope-olva.
+   Saját --ev-* token-világ, a közös --pm-* tokenektől független (azok a
+   hero/shell-é). A teljes keretet+hátteret is itt festem (a globális .panel
+   csak grid-elhelyezést ad). Alap-állapot OLVASHATÓ; a "megvakulás" szándékos.
+   ========================================================================= */
+
+#panel-pixelmano {
+  /* ---- Saját editorial token-világ (--ev-*) -------------------------- */
+  --ev-paper:   hsl(38 30% 95%);
+  --ev-paper-2: hsl(36 26% 91%);
+  --ev-ink:     hsl(30 8% 12%);
+  --ev-ink-soft: hsl(30 10% 34%);
+  --ev-line:    hsl(30 14% 24%);
+
+  /* A theme-csúszkával hangolt akcent (a JS írja a h/l csatornát) */
+  --ev-accent-h: 8;
+  --ev-accent-s: 80%;
+  --ev-accent-l: 46%;
+  --ev-accent:   hsl(var(--ev-accent-h) var(--ev-accent-s) var(--ev-accent-l));
+  /* A gomb felirat-színe: a JS a jobb kontrasztút választja (ink v. papír) */
+  --ev-btn-fg:   var(--ev-paper);
+
+  /* Az "eltűnés" mértéke: a JS a cím-kontrasztból számolja */
+  --ev-vanish-blur: 0px;
+  --ev-vanish-opacity: 1;
+
+  --ev-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --ev-pulse: var(--pm-pulse-duration, 1.05s);
+
+  --ev-font: "Space Grotesk", "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --ev-mono: "JetBrains Mono", "Fira Code", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);  /* a nagy display-cím ne szélesítse ki a panelt */
+  gap: clamp(1.5rem, 3.5vw, 2.75rem);
+  max-width: 1080px;
+  margin-inline: auto;
+  padding: clamp(1.5rem, 3.5vw, 3rem);
+  color: var(--ev-ink);
+  font-family: var(--ev-font);
+  line-height: 1.55;
+  background-color: var(--ev-paper);
+  border: 2px solid var(--ev-ink);
+  box-shadow: 6px 6px 0 0 var(--ev-ink);
+  overflow: hidden;   /* a nagy display-cím a szélig bleedelhet */
+}
+
+/* ---- Fejléc (editorial, aszimmetrikus) -------------------------------- */
+#panel-pixelmano .ev-head {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: baseline;
+  gap: 0.4rem 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--ev-line);
+}
+#panel-pixelmano .ev-kicker {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ev-ink);
+}
+#panel-pixelmano .ev-folio {
+  margin: 0;
+  justify-self: end;
+  font-family: var(--ev-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  color: var(--ev-ink-soft);
+}
+#panel-pixelmano .ev-title {
+  grid-column: 1 / -1;
+  margin: 0.6rem 0 0;
+  font-size: clamp(2.4rem, 1.4rem + 5vw, 4.6rem);
+  line-height: 0.94;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  text-transform: uppercase;
+}
+#panel-pixelmano .ev-lead {
+  grid-column: 1 / -1;
+  margin: 0.9rem 0 0;
+  max-width: 62ch;
+  font-size: 1rem;
+  color: var(--ev-ink-soft);
+}
+#panel-pixelmano .ev-lead strong {
+  color: var(--ev-ink);
+  font-weight: 700;
+  box-shadow: inset 0 -0.35em 0 hsl(var(--ev-accent-h) var(--ev-accent-s) var(--ev-accent-l) / 0.22);
+}
+
+/* ---- AZ EGY DOLOG: élő kontraszt-próba (a cím eltűnik) ---------------- */
+#panel-pixelmano .ev-stage {
+  position: relative;
+  margin: 0;
+  padding: clamp(1.25rem, 3vw, 2.25rem) 0 1.5rem;
+}
+#panel-pixelmano .ev-stage__label {
+  margin: 0 0 0.4rem;
+  font-family: var(--ev-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ev-ink-soft);
+}
+#panel-pixelmano .ev-display {
+  margin: 0;
+  font-size: clamp(3.2rem, 1.5rem + 12vw, 9rem);
+  line-height: 0.9;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;   /* egy sorban marad és a panel széléig bleedel */
+  overflow: hidden;
+  color: var(--ev-accent);
+  /* AZ EFFEKT: a kontraszt-hiány elmossa és elhalványítja a címet */
+  filter: blur(var(--ev-vanish-blur, 0px));
+  opacity: var(--ev-vanish-opacity, 1);
+  transition: filter 0.4s var(--ev-ease), opacity 0.4s var(--ev-ease), color 0.25s linear;
+  will-change: filter, opacity;
+}
+/* kinetikus, alig-észrevehető "lélegzés" a közös pulzussal */
+#panel-pixelmano.ev-anim .ev-display {
+  animation: ev-breathe var(--ev-pulse) ease-in-out infinite;
+}
+@keyframes ev-breathe {
+  0%, 100% { letter-spacing: -0.04em; }
+  50%      { letter-spacing: -0.015em; }
+}
+/* pulzus-hairline a cím alatt (a panel saját pulzus-vonala) */
+#panel-pixelmano .ev-stage::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0.6rem;
+  height: 2px;
+  background: var(--ev-accent);
+  transform-origin: left center;
+}
+#panel-pixelmano.ev-anim .ev-stage::after {
+  animation: ev-pulse-rule var(--ev-pulse) var(--ev-ease) infinite;
+}
+@keyframes ev-pulse-rule {
+  0%, 100% { transform: scaleX(0.4); opacity: 0.5; }
+  30%      { transform: scaleX(1);   opacity: 1; }
+}
+
+#panel-pixelmano .ev-verdict {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem 0.9rem;
+  margin: 0.9rem 0 0;
+}
+#panel-pixelmano .ev-verdict__ratio {
+  font-family: var(--ev-mono);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--ev-ink);
+}
+#panel-pixelmano .ev-verdict__word {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border: 1.5px solid var(--ev-ink);
+}
+#panel-pixelmano .ev-verdict__word[data-state="crisp"] { background: var(--ev-ink); color: var(--ev-paper); }
+#panel-pixelmano .ev-verdict__word[data-state="large"] { background: var(--ev-paper); color: var(--ev-ink); }
+#panel-pixelmano .ev-verdict__word[data-state="gone"]  { background: var(--ev-accent); color: var(--ev-btn-fg); }
+#panel-pixelmano .ev-verdict__hint {
+  font-size: 0.76rem;
+  color: var(--ev-ink-soft);
+}
+
+/* ---- Téma-hangoló (vezérlő) ------------------------------------------- */
+#panel-pixelmano .ev-controls {
+  display: grid;
+  gap: 1rem;
+  padding: clamp(1rem, 2.5vw, 1.5rem);
+  background: var(--ev-paper-2);
+  border: 1px solid var(--ev-line);
+}
+#panel-pixelmano .ev-controls__title {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+#panel-pixelmano .ev-control {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 0.35rem 1rem;
+}
+#panel-pixelmano .ev-control label {
+  grid-column: 1 / -1;
+  font-size: 0.85rem;
+  color: var(--ev-ink);
+}
+#panel-pixelmano .ev-control__val {
+  font-family: var(--ev-mono);
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--ev-ink);
+  min-width: 4ch;
+  text-align: right;
+}
+
+/* Editorial range: vékony sín, szögletes akcent-thumb */
+#panel-pixelmano .ev-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  background: var(--ev-line);
+  cursor: pointer;
+}
+#panel-pixelmano .ev-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px; height: 18px;
+  background: var(--ev-accent);
+  border: 2px solid var(--ev-ink);
+  transition: transform 120ms var(--ev-ease);
+}
+#panel-pixelmano .ev-range::-moz-range-thumb {
+  width: 18px; height: 18px;
+  background: var(--ev-accent);
+  border: 2px solid var(--ev-ink);
+  border-radius: 0;
+}
+#panel-pixelmano .ev-range:hover::-webkit-slider-thumb { transform: scale(1.15); }
+#panel-pixelmano .ev-range:focus-visible { outline: 2px solid var(--ev-ink); outline-offset: 4px; }
+
+/* Mérők */
+#panel-pixelmano .ev-meters { display: grid; gap: 0.7rem; margin-top: 0.3rem; }
+#panel-pixelmano .ev-meter {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 0.7rem;
+  padding-top: 0.7rem;
+  border-top: 1px solid var(--ev-line);
+}
+#panel-pixelmano .ev-meter__label { font-size: 0.85rem; }
+#panel-pixelmano .ev-meter__label em { color: var(--ev-ink-soft); font-style: normal; font-size: 0.78rem; }
+#panel-pixelmano .ev-meter__ratio {
+  font-family: var(--ev-mono);
+  font-weight: 700;
+  font-size: 0.95rem;
+  min-width: 5ch;
+  text-align: right;
+}
+#panel-pixelmano .ev-meters__note {
+  margin: 0.2rem 0 0;
+  font-size: 0.76rem;
+  line-height: 1.55;
+  color: var(--ev-ink-soft);
+}
+
+/* Verdict-jelvény (mérőkhöz): pass = ink outline, fail = ink kitöltés */
+#panel-pixelmano .ev-badge--verdict {
+  border: 1.5px solid var(--ev-ink);
+  background: var(--ev-paper);
+  color: var(--ev-ink);
+}
+#panel-pixelmano .ev-badge--verdict[data-state="pass"] { background: var(--ev-paper); color: var(--ev-ink); }
+#panel-pixelmano .ev-badge--verdict[data-state="fail"] { background: var(--ev-ink); color: var(--ev-paper); }
+
+/* ---- Galéria + specimenek --------------------------------------------- */
+#panel-pixelmano .ev-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+  gap: 1.25rem;
+}
+#panel-pixelmano .ev-specimen {
+  position: relative;
+  display: grid;
+  gap: 0.7rem;
+  align-content: start;
+  padding: 1.2rem;
+  background: var(--ev-paper);
+  border: 1px solid var(--ev-line);
+}
+#panel-pixelmano .ev-specimen__index {
+  position: absolute;
+  top: 0.6rem; right: 0.9rem;
+  margin: 0;
+  font-family: var(--ev-mono);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--ev-accent);
+}
+#panel-pixelmano .ev-specimen__stage {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 1.1rem;
+  background: var(--ev-paper-2);
+  border: 1px solid var(--ev-line);
+  min-height: 92px;
+}
+#panel-pixelmano .ev-specimen__name {
+  margin: 0.3rem 0 0;
+  font-size: 1.1rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+#panel-pixelmano .ev-specimen__tag {
+  font-family: var(--ev-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--ev-ink-soft);
+}
+#panel-pixelmano .ev-specimen__desc { margin: 0; font-size: 0.85rem; color: var(--ev-ink-soft); }
+
+#panel-pixelmano .ev-tokenlist {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+#panel-pixelmano .ev-tokenlist code {
+  font-family: var(--ev-mono);
+  font-size: 0.7rem;
+  padding: 1px 6px;
+  border: 1px solid var(--ev-line);
+  color: var(--ev-ink);
+}
+
+/* Kód-blokk (self-documenting) — editorial, világos */
+#panel-pixelmano .ev-code-toggle {
+  justify-self: start;
+  font: inherit;
+  font-weight: 700;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ev-ink);
+  background: none;
+  border: none;
+  border-bottom: 2px solid var(--ev-accent);
+  padding: 0 0 2px;
+  cursor: pointer;
+}
+#panel-pixelmano .ev-code-toggle:hover { color: var(--ev-accent); }
+#panel-pixelmano .ev-code {
+  margin: 0.2rem 0 0;
+  padding: 0.9rem 1rem;
+  overflow-x: auto;
+  background: var(--ev-paper-2);
+  border: 1px solid var(--ev-line);
+  border-left: 3px solid var(--ev-accent);
+  font-family: var(--ev-mono);
+  font-size: 0.72rem;
+  line-height: 1.65;
+  color: var(--ev-ink);
+}
+#panel-pixelmano .ev-code[hidden] { display: none; }
+#panel-pixelmano.ev-anim .ev-code:not([hidden]) { animation: ev-reveal 200ms var(--ev-ease); }
+@keyframes ev-reveal { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ---- Demo-komponensek a stage-en -------------------------------------- */
+#panel-pixelmano .ev-btn {
+  font: inherit;
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ev-btn-fg);
+  background: var(--ev-accent);
+  border: 2px solid var(--ev-ink);
+  padding: 0.55rem 1.1rem;
+  cursor: pointer;
+  transition: transform 120ms var(--ev-ease), box-shadow 120ms var(--ev-ease);
+}
+#panel-pixelmano .ev-btn:hover { transform: translateY(-2px); box-shadow: 3px 3px 0 0 var(--ev-ink); }
+#panel-pixelmano .ev-btn:active { transform: translateY(0); box-shadow: 1px 1px 0 0 var(--ev-ink); }
+#panel-pixelmano .ev-btn--ghost {
+  color: var(--ev-ink);
+  background: var(--ev-paper);
+}
+
+#panel-pixelmano .ev-card-demo {
+  padding: 1.1rem;
+  background: var(--ev-paper);
+  border: 1px solid var(--ev-line);
+  border-top: 4px solid var(--ev-accent);
+  max-width: 240px;
+}
+#panel-pixelmano .ev-card-demo__kicker {
+  margin: 0;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ev-ink-soft);
+}
+#panel-pixelmano .ev-card-demo__title { margin: 0.35rem 0 0.3rem; font-weight: 800; font-size: 1.05rem; }
+#panel-pixelmano .ev-card-demo__body { margin: 0; font-size: 0.82rem; color: var(--ev-ink-soft); }
+
+#panel-pixelmano .ev-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ev-ink);
+  background: var(--ev-paper);
+  border: 1.5px solid var(--ev-ink);
+  padding: 2px 9px;
+}
+#panel-pixelmano .ev-badge--ok::before { content: "\25CF"; color: var(--ev-accent); font-size: 0.7em; }
+#panel-pixelmano .ev-badge--line { background: transparent; }
+
+#panel-pixelmano .ev-toast-demo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--ev-ink);
+  background: var(--ev-paper);
+  border: 1px solid var(--ev-line);
+  border-left: 3px solid var(--ev-accent);
+  padding: 0.5rem 0.8rem;
+}
+#panel-pixelmano .ev-toast-demo__dot {
+  width: 8px; height: 8px;
+  background: var(--ev-accent);
+  flex: none;
+}
+#panel-pixelmano.ev-anim .ev-toast-demo__dot { animation: ev-blink var(--ev-pulse) steps(1) infinite; }
+@keyframes ev-blink { 0%, 60% { opacity: 1; } 61%, 100% { opacity: 0.3; } }
+
+#panel-pixelmano .ev-btn--ghost[data-action="reset-theme"] { justify-self: start; }
+
+#panel-pixelmano .ev-footnote {
+  margin: 0;
+  padding-top: 1rem;
+  border-top: 1px solid var(--ev-line);
+  font-size: 0.78rem;
+  color: var(--ev-ink-soft);
+}
+
+/* ---- Fókusz-láthatóság ------------------------------------------------ */
+#panel-pixelmano :focus-visible {
+  outline: 2px solid var(--ev-ink);
+  outline-offset: 2px;
+}
+
+/* ---- Reszponzív ------------------------------------------------------- */
+@media (max-width: 640px) {
+  #panel-pixelmano { box-shadow: 4px 4px 0 0 var(--ev-ink); }
+  #panel-pixelmano .ev-head { grid-template-columns: 1fr; }
+  #panel-pixelmano .ev-folio { justify-self: start; }
+}
+
+/* ---- Mozgáscsökkentés: minden animáció leáll, az EFFEKT statikusan marad */
+@media (prefers-reduced-motion: reduce) {
+  #panel-pixelmano.ev-anim .ev-display,
+  #panel-pixelmano.ev-anim .ev-stage::after,
+  #panel-pixelmano.ev-anim .ev-toast-demo__dot,
+  #panel-pixelmano.ev-anim .ev-code:not([hidden]) { animation: none; }
+  #panel-pixelmano .ev-display { transition: none; }
+  #panel-pixelmano .ev-stage::after { transform: scaleX(1); opacity: 0.8; }
+  #panel-pixelmano .ev-btn,
+  #panel-pixelmano .ev-range::-webkit-slider-thumb { transition: none; }
+}

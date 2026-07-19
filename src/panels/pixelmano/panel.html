@@ -1,0 +1,192 @@
+<!-- =======================================================================
+     Panel: Az Élő Vászon  (slug: pixelmano) — Frontend
+     Jóváhagyott koncepció: C) "A Betű, Ami Eltűnik"
+       kinetikus-brutalista editorial tipó; a WCAG-kontraszt átélt esemény:
+       rossz színnél a nagy display-cím beleolvad a papírba (megvakul),
+       javításra élesre pattan. Az akadálymentesség zsigeri lesz.
+     Integrációs szerződés: egyetlen <section class="panel" id="panel-pixelmano">
+     fragment. NINCS html/head/body. A lényegi tartalom NYERS HTML-ben (GEO/AEO),
+     a panel.js csak progresszíven gazdagítja. Alap-állapot OLVASHATÓ; a
+     "megvakulás" szándékos demonstráció, ami visszaáll.
+     ======================================================================= -->
+<section class="panel" id="panel-pixelmano" aria-labelledby="pixelmano-title" data-panel="pixelmano" data-init="initPanel_pixelmano">
+
+  <header class="ev-head">
+    <p class="ev-kicker">Frontend &middot; Pixelmanó</p>
+    <p class="ev-folio" aria-hidden="true">P / 03</p>
+    <h2 id="pixelmano-title" class="ev-title">Az Élő Vászon</h2>
+    <p class="ev-lead">
+      Ez a panel a Pulzus Műhely design-rendszere, ami <strong>önmagát dokumentálja</strong>.
+      Minden komponens megmutatja a saját HTML-jét, CSS-ét és a felhasznált
+      design-tokeneket. A téma-csúszkával valós időben átszínezed az egészet,
+      és a rendszer azonnal megméri a WCAG&nbsp;AA kontrasztot. A dizájn itt nem
+      statikus dísz, hanem élő, ellenőrizhető anyag: ha rossz színt állítasz be,
+      a nagy cím a szemed előtt olvad bele a papírba, ahogy javítod, élesre pattan.
+    </p>
+  </header>
+
+  <!-- ---- AZ EGY DOLOG: élő kontraszt-próba, a cím eltűnik/visszaáll ---- -->
+  <figure class="ev-stage" role="group" aria-labelledby="ev-stage-label">
+    <figcaption id="ev-stage-label" class="ev-stage__label">Kontraszt-próba &mdash; élő</figcaption>
+    <p class="ev-display" data-display>OLVASHATÓ</p>
+    <p class="ev-verdict" aria-live="polite">
+      <span class="ev-verdict__ratio" data-verdict-ratio>—</span>
+      <span class="ev-verdict__word" data-verdict-word>—</span>
+      <span class="ev-verdict__hint">a nagy cím színe = az akcent; húzd a csúszkát, és nézd</span>
+    </p>
+  </figure>
+
+  <!-- ---- Téma-hangoló: csúszkák + WCAG-mérők -------------------------- -->
+  <div class="ev-controls" role="group" aria-labelledby="ev-controls-title">
+    <p id="ev-controls-title" class="ev-controls__title">Téma-hangoló</p>
+
+    <div class="ev-control">
+      <label for="ev-hue">Akcent színárnyalat</label>
+      <input type="range" id="ev-hue" class="ev-range" min="0" max="360" step="1" value="8"
+             aria-describedby="ev-hue-val" />
+      <output id="ev-hue-val" class="ev-control__val">8&deg;</output>
+    </div>
+
+    <div class="ev-control">
+      <label for="ev-light">Akcent világosság</label>
+      <input type="range" id="ev-light" class="ev-range" min="30" max="92" step="1" value="46"
+             aria-describedby="ev-light-val" />
+      <output id="ev-light-val" class="ev-control__val">46%</output>
+    </div>
+
+    <div class="ev-meters">
+      <div class="ev-meter">
+        <span class="ev-meter__label">A cím kontrasztja <em>(nyers szín &times; papír)</em></span>
+        <span class="ev-meter__ratio" data-contrast="title">—</span>
+        <span class="ev-badge ev-badge--verdict" data-contrast-badge="title">AA</span>
+      </div>
+      <div class="ev-meter">
+        <span class="ev-meter__label">A gomb felirata <em>(védett komponens)</em></span>
+        <span class="ev-meter__ratio" data-contrast="btn">—</span>
+        <span class="ev-badge ev-badge--verdict" data-contrast-badge="btn">AA</span>
+      </div>
+      <p class="ev-meters__note">
+        A nagy címhez (large text) a WCAG&nbsp;AA 3:1-et, a normál felirathoz
+        4,5:1-et kér. A cím a nyers akcent-szín: ha az beleolvad a papírba,
+        eltűnik. A gomb ezzel szemben okosan ink- vagy papír-feliratot vált,
+        hogy megvédje az olvashatóságát &mdash; ezt méri a második sor.
+      </p>
+      <button type="button" class="ev-btn ev-btn--ghost" data-action="reset-theme">
+        Alaphelyzet
+      </button>
+    </div>
+  </div>
+
+  <!-- ---- Komponens-galéria: minden specimen önmagát dokumentálja ------- -->
+  <div class="ev-gallery">
+
+    <!-- 1. Gomb -->
+    <article class="ev-specimen" data-specimen="button">
+      <p class="ev-specimen__index" aria-hidden="true">01</p>
+      <div class="ev-specimen__stage">
+        <button type="button" class="ev-btn">Pulzus indítása</button>
+        <button type="button" class="ev-btn ev-btn--ghost">Mégse</button>
+      </div>
+      <h3 class="ev-specimen__name">Gomb <span class="ev-specimen__tag">.ev-btn</span></h3>
+      <p class="ev-specimen__desc">
+        Elsődleges és "ghost" variáns. A felirat színét a rendszer az akcenthez
+        választja (ink vagy papír), hogy AA maradjon. Fókusz-gyűrű billentyűzethez.
+      </p>
+      <ul class="ev-tokenlist" aria-label="Felhasznált design-tokenek">
+        <li><code>--ev-accent</code></li>
+        <li><code>--ev-btn-fg</code></li>
+        <li><code>--ev-ink</code></li>
+        <li><code>--ev-line</code></li>
+      </ul>
+      <button type="button" class="ev-code-toggle" aria-expanded="false"
+              data-code-for="button">Kód megmutatása</button>
+      <pre class="ev-code" data-code="button" hidden><code>&lt;button class="ev-btn"&gt;Pulzus indítása&lt;/button&gt;
+
+.ev-btn {
+  background: var(--ev-accent);
+  color: var(--ev-btn-fg);   /* JS a jobb kontrasztút választja */
+  border: 2px solid var(--ev-ink);
+  padding: 0.55rem 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.ev-btn:hover { transform: translateY(-2px); }</code></pre>
+    </article>
+
+    <!-- 2. Kártya -->
+    <article class="ev-specimen" data-specimen="card">
+      <p class="ev-specimen__index" aria-hidden="true">02</p>
+      <div class="ev-specimen__stage">
+        <div class="ev-card-demo">
+          <p class="ev-card-demo__kicker">Komponens</p>
+          <p class="ev-card-demo__title">Editorial kártya</p>
+          <p class="ev-card-demo__body">Vékony vonalak, tipó-hierarchia, egyetlen akcent-jel.</p>
+        </div>
+      </div>
+      <h3 class="ev-specimen__name">Kártya <span class="ev-specimen__tag">.ev-card-demo</span></h3>
+      <p class="ev-specimen__desc">
+        Papír-felület precíz hajszálvonal-kerettel és erős tipográfiai
+        hierarchiával. A mélységet a ritmus és a kontraszt adja, nem a lágy árnyék.
+      </p>
+      <ul class="ev-tokenlist" aria-label="Felhasznált design-tokenek">
+        <li><code>--ev-paper</code></li>
+        <li><code>--ev-line</code></li>
+        <li><code>--ev-accent</code></li>
+        <li><code>--ev-ink-soft</code></li>
+      </ul>
+      <button type="button" class="ev-code-toggle" aria-expanded="false"
+              data-code-for="card">Kód megmutatása</button>
+      <pre class="ev-code" data-code="card" hidden><code>&lt;div class="ev-card-demo"&gt;...&lt;/div&gt;
+
+.ev-card-demo {
+  background: var(--ev-paper);
+  border: 1px solid var(--ev-line);
+  border-top: 4px solid var(--ev-accent);
+  padding: 1.1rem;
+}</code></pre>
+    </article>
+
+    <!-- 3. Badge + toast -->
+    <article class="ev-specimen" data-specimen="badge">
+      <p class="ev-specimen__index" aria-hidden="true">03</p>
+      <div class="ev-specimen__stage">
+        <span class="ev-badge">42 skill</span>
+        <span class="ev-badge ev-badge--ok">Élő</span>
+        <span class="ev-badge ev-badge--line">Béta</span>
+        <div class="ev-toast-demo" role="status">
+          <span class="ev-toast-demo__dot" aria-hidden="true"></span>
+          Ne ess pánikba. A build lefutott.
+        </div>
+      </div>
+      <h3 class="ev-specimen__name">Jelvény &amp; toast <span class="ev-specimen__tag">.ev-badge</span></h3>
+      <p class="ev-specimen__desc">
+        Állapotjelző tag-ek és egy diszkrét toast, editorial ritmusban. A jelentést
+        a forma és a felirat hordozza, nem csak a szín &mdash; így színvakon is olvasható.
+      </p>
+      <ul class="ev-tokenlist" aria-label="Felhasznált design-tokenek">
+        <li><code>--ev-ink</code></li>
+        <li><code>--ev-line</code></li>
+        <li><code>--ev-accent</code></li>
+        <li><code>--ev-paper-2</code></li>
+      </ul>
+      <button type="button" class="ev-code-toggle" aria-expanded="false"
+              data-code-for="badge">Kód megmutatása</button>
+      <pre class="ev-code" data-code="badge" hidden><code>&lt;span class="ev-badge ev-badge--ok"&gt;Élő&lt;/span&gt;
+
+.ev-badge {
+  border: 1.5px solid var(--ev-ink);
+  padding: 2px 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.7rem;
+}
+.ev-badge--ok::before { content: "●"; color: var(--ev-accent); }</code></pre>
+    </article>
+
+  </div>
+
+  <p class="ev-footnote">
+    Frontend: Pixelmanó. Vanilla HTML/CSS/JS, keretrendszer nélkül.
+    "A Betű, Ami Eltűnik" &mdash; a kontraszt itt nem szám, hanem esemény.
+  </p>
+</section>

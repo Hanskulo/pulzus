@@ -1,0 +1,29 @@
+# Pulzus Műhely — robots.txt
+# Emberi és gépi olvasóknak egyaránt nyitva. Az AI-válaszmotorokat kifejezetten
+# beengedjük: azt akarjuk, hogy megismerjenek és idézzenek minket.
+
+User-agent: *
+Allow: /
+
+# AI / válaszmotor crawlerek (tudatosan engedélyezve)
+User-agent: GPTBot
+Allow: /
+User-agent: OAI-SearchBot
+Allow: /
+User-agent: ChatGPT-User
+Allow: /
+User-agent: PerplexityBot
+Allow: /
+User-agent: ClaudeBot
+Allow: /
+User-agent: anthropic-ai
+Allow: /
+User-agent: Google-Extended
+Allow: /
+User-agent: CCBot
+Allow: /
+User-agent: Applebot-Extended
+Allow: /
+
+# Gépi összefoglaló: /llms.txt
+Sitemap: https://hanskulo.github.io/pulzus/sitemap.xml

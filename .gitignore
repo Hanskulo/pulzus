@@ -1,0 +1,15 @@
+dist/
+.preview/
+preview/
+preview-*.png
+*-preview.png
+node_modules/
+__pycache__/
+*.pyc
+
+# Belso munkafajlok -- lokalisan maradnak, NEM a publikus repoban
+SPEC.md
+SELECTION.md
+**/CONCEPT.md
+**/README.md
+src/panels/dezso/data/gen-health-snapshot.py

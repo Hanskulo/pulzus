@@ -1,0 +1,222 @@
+/* panel-dezso -- "A Szerver Szívverése"
+   Koncepcio: SZEIZMOGRAF -- brutalista-ipari, tapinthato fizikai MUSZER (nem kepernyo).
+   Vilagos krem papir alap, analog mutatos orak, papirtekercs, tinta. Szandekos ellentet
+   a sotet globallal -> MINDEN szabaly szigoruan #panel-dezso ala scope-olva. */
+
+#panel-dezso {
+  /* --- ipari papir-paletta --- */
+  --p-paper:  #e9e2cf;          /* krem papir */
+  --p-paper2: #efe9d9;          /* vilagosabb papir */
+  --p-grid:   #c7bda0;          /* millimeterpapir vonal */
+  --p-ink:    #21262b;          /* fo tinta/grafit szoveg (kontraszt ~11:1) */
+  --p-ink2:   #4a4a40;          /* masodlagos (kontraszt ~6:1) */
+  --p-blue:   #1e4d74;          /* tintakek akcent */
+  --p-warn:   #b23a06;          /* figyelmezteto narancs (incidens) */
+  --p-metal1: #cfc8b6;          /* fem-perem vilagos */
+  --p-metal2: #8f8873;          /* fem-perem sotet */
+  --p-signal: var(--p-blue);    /* allapot-fuggo jel-szin */
+
+  --p-mono: ui-monospace, "SFMono-Regular", "JetBrains Mono", Menlo, Consolas, monospace;
+  --p-cond: "Arial Narrow", "Helvetica Neue Condensed", "Roboto Condensed", system-ui, sans-serif;
+  --p-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  color: var(--p-ink);
+  font-family: var(--p-sans);
+  line-height: 1.55;
+  container-type: inline-size;
+}
+#panel-dezso[data-status="amber"] { --p-signal: #9a6b0e; }
+#panel-dezso[data-status="red"]   { --p-signal: var(--p-warn); }
+
+/* --- a muszerlap: krem papir + millimeter-racs + fem-perem --- */
+#panel-dezso .pd-plate {
+  position: relative;
+  background:
+    linear-gradient(var(--p-grid) 1px, transparent 1px) 0 0 / 100% 22px,
+    linear-gradient(90deg, var(--p-grid) 1px, transparent 1px) 0 0 / 22px 100%,
+    linear-gradient(var(--p-grid) 1px, transparent 1px) 0 0 / 100% 110px,
+    linear-gradient(90deg, var(--p-grid) 1px, transparent 1px) 0 0 / 110px 100%,
+    radial-gradient(120% 100% at 30% 0%, var(--p-paper2), var(--p-paper));
+  background-blend-mode: soft-light, soft-light, normal, normal, normal;
+  border: 1px solid var(--p-metal2);
+  border-radius: 3px;
+  padding: clamp(1.25rem, 3.5vw, 2.25rem);
+  box-shadow:
+    inset 0 0 0 6px rgba(233,226,207,.5),
+    inset 0 0 0 7px var(--p-metal1),
+    inset 0 2px 14px rgba(90,80,55,.18),
+    0 1px 0 rgba(255,255,255,.4);
+}
+
+/* --- fem-cimke a tetejen --- */
+#panel-dezso .pd-plate-tag {
+  display: flex; align-items: center; gap: .6rem; flex-wrap: wrap;
+  font-family: var(--p-mono); font-size: .64rem; letter-spacing: .14em;
+  text-transform: uppercase; color: #f3eede;
+  background: linear-gradient(180deg, var(--p-metal1), var(--p-metal2));
+  border: 1px solid var(--p-metal2); border-radius: 2px;
+  padding: .35rem .6rem; margin: 0 0 1.1rem;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.45), 0 1px 2px rgba(70,60,40,.3);
+  text-shadow: 0 1px 0 rgba(60,50,35,.5);
+}
+#panel-dezso .pd-tag-mark  { font-weight: 700; letter-spacing: .2em; }
+#panel-dezso .pd-tag-model { color: #e7e0cd; }
+#panel-dezso .pd-tag-serial { margin-left: auto; color: #f3eede; font-weight: 700; }
+
+/* --- fejlec --- */
+#panel-dezso .pd-kicker {
+  margin: 0 0 .3rem; font-family: var(--p-mono); font-size: .7rem;
+  letter-spacing: .12em; text-transform: uppercase; color: var(--p-ink2);
+}
+#panel-dezso .pd-title {
+  margin: 0; font-family: var(--p-cond);
+  font-size: clamp(2rem, 8cqi, 3.2rem); line-height: .95; font-weight: 800;
+  letter-spacing: .01em; text-transform: uppercase; color: var(--p-ink);
+  /* stencil/belyegzo erzet: enyhe dupla-kontur */
+  text-shadow: 1.5px 1.5px 0 rgba(30,77,116,.14);
+}
+#panel-dezso .pd-role {
+  margin: .4rem 0 0; font-family: var(--p-mono); font-size: .8rem; font-weight: 700;
+  letter-spacing: .05em; color: var(--p-blue); text-transform: uppercase;
+}
+#panel-dezso .pd-lede {
+  margin: .85rem 0 0; max-width: 60ch; color: var(--p-ink2); font-size: .95rem; line-height: 1.62;
+}
+
+/* --- SZEIZMOGRAF papirtekercs --- */
+#panel-dezso .pd-seismo { margin: 1.5rem 0 1.3rem; }
+#panel-dezso .pd-seismo-cap {
+  display: flex; align-items: baseline; gap: .6rem; margin: 0 0 .45rem;
+  font-family: var(--p-mono); font-size: .68rem; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--p-ink2); font-weight: 700;
+}
+#panel-dezso .pd-seismo-sub { font-weight: 400; letter-spacing: .06em; color: var(--p-ink2); opacity: .8; }
+#panel-dezso .pd-seismo-paper {
+  position: relative; height: 150px; border-radius: 2px; overflow: hidden;
+  /* besullyesztett papirtekercs finom vizszintes vonalvezetovel */
+  background:
+    repeating-linear-gradient(90deg, transparent 0 31px, rgba(120,105,70,.10) 31px 32px),
+    repeating-linear-gradient(0deg, transparent 0 24px, rgba(120,105,70,.08) 24px 25px),
+    linear-gradient(180deg, #f1ecdd, #e4ddc8);
+  border: 1px solid var(--p-metal2);
+  box-shadow: inset 0 3px 10px rgba(80,68,45,.22), inset 0 -2px 6px rgba(80,68,45,.12);
+}
+#panel-dezso .pd-seismo-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+/* --- allapot-belyegzo (gumibelyegzo) --- */
+#panel-dezso .pd-stamp {
+  display: inline-flex; flex-direction: column; align-items: flex-start; gap: .1rem;
+  margin: 0 0 1.4rem; padding: .5rem .9rem;
+  border: 2.5px solid var(--p-signal); border-radius: 4px;
+  transform: rotate(-2.2deg); transform-origin: left center;
+  color: var(--p-signal); background: rgba(255,255,255,.14);
+  box-shadow: 0 1px 0 rgba(255,255,255,.4);
+}
+#panel-dezso .pd-stamp-ink {
+  font-family: var(--p-cond); font-size: 1.35rem; font-weight: 800;
+  letter-spacing: .08em; text-transform: uppercase; line-height: 1;
+}
+#panel-dezso .pd-stamp-meta {
+  font-family: var(--p-mono); font-size: .64rem; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--p-ink2);
+}
+
+/* --- ANALOG MUSZEREK racs --- */
+#panel-dezso .pd-gauges {
+  display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 1rem; margin: 0 0 1.4rem;
+}
+#panel-dezso .pd-counters { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+/* mutatos ora */
+#panel-dezso .pd-gauge {
+  margin: 0; padding: .7rem .7rem .55rem; border-radius: 4px;
+  background: radial-gradient(120% 120% at 50% 25%, #f4efe1, #e3dcc7);
+  border: 1px solid var(--p-metal2);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.55), inset 0 0 0 4px rgba(207,200,182,.35), 0 1px 3px rgba(80,68,45,.2);
+  /* enyhe elforgatas -> nem grid-merev (racs-tores) */
+}
+#panel-dezso .pd-gauge[data-role="gauge-latency"] { transform: rotate(-1deg); }
+#panel-dezso .pd-gauge[data-role="gauge-disk"]    { transform: rotate(1.2deg); }
+#panel-dezso .pd-gauge-face { display: block; width: 100%; height: auto; }
+#panel-dezso .pd-gauge-arc { stroke: var(--p-ink2); stroke-width: 1.5; opacity: .5; }
+#panel-dezso .pd-gauge-ticks line { stroke: var(--p-ink2); stroke-width: 1; }
+#panel-dezso .pd-gauge-ticks line.maj { stroke: var(--p-ink); stroke-width: 1.6; }
+/* a mutatot a CSOPORTOT forgatjuk a hub (60,88) korul, view-box koordinatakban --
+   egy fuggoleges vonal fill-box-a 0 szeles, az elrontana az origot. */
+#panel-dezso .pd-gauge-needle-grp {
+  transform-box: view-box; transform-origin: 60px 88px;
+  transform: rotate(var(--pd-needle, 0deg));
+  transition: transform 1.1s cubic-bezier(.34,1.56,.5,1);   /* tullendulo rezzenes */
+}
+#panel-dezso .pd-gauge-needle { stroke: var(--p-warn); stroke-width: 2.4; stroke-linecap: round; }
+#panel-dezso .pd-gauge-hub { fill: var(--p-ink); }
+#panel-dezso .pd-gauge-cap {
+  display: flex; align-items: baseline; justify-content: space-between; gap: .4rem; margin-top: .2rem;
+}
+#panel-dezso .pd-gauge-label { font-family: var(--p-mono); font-size: .66rem; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--p-ink2); }
+#panel-dezso .pd-gauge-read { font-family: var(--p-mono); font-size: .82rem; color: var(--p-ink); }
+#panel-dezso .pd-gauge-read b { font-size: 1.15rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+/* szamlalo-kijelzo (split-flap jelleg) */
+#panel-dezso .pd-counter {
+  margin: 0; padding: .6rem .8rem; border-radius: 3px;
+  background: linear-gradient(180deg, #2b3138, #1c2126);   /* sotet flap-kartya a vilagos lapon */
+  border: 1px solid #12161a;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 1px 3px rgba(60,50,35,.35);
+  position: relative;
+}
+#panel-dezso .pd-counter::after {          /* split-flap kozepvonal */
+  content: ""; position: absolute; left: 0; right: 0; top: calc(50% - 6px); height: 1px;
+  background: rgba(0,0,0,.5);
+}
+#panel-dezso .pd-counter-num {
+  display: block; font-family: var(--p-mono); font-size: 1.9rem; font-weight: 700;
+  line-height: 1; color: #f4efe1; font-variant-numeric: tabular-nums; letter-spacing: .02em;
+}
+#panel-dezso .pd-counter-num small { font-size: .8rem; margin-left: .25rem; color: #b9b09a; font-weight: 400; }
+#panel-dezso .pd-counter-num b { font-weight: 700; }
+#panel-dezso .pd-counter figcaption {
+  margin-top: .3rem; font-family: var(--p-mono); font-size: .6rem; letter-spacing: .1em;
+  text-transform: uppercase; color: #b9b09a;
+}
+
+/* --- MUSZERNAPLO --- */
+#panel-dezso .pd-log-title {
+  margin: 0 0 .55rem; font-family: var(--p-mono); font-size: .68rem; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--p-ink2); font-weight: 700;
+}
+#panel-dezso .pd-log ul { list-style: none; margin: 0 0 1.4rem; padding: 0; }
+#panel-dezso .pd-log-row {
+  display: flex; align-items: baseline; gap: .5rem; padding: .5rem 0;
+  border-bottom: 1px dashed rgba(74,74,64,.4); font-size: .9rem;
+}
+#panel-dezso .pd-log-row:first-child { border-top: 1px dashed rgba(74,74,64,.4); }
+#panel-dezso .pd-log-name { font-weight: 600; color: var(--p-ink); position: relative; padding-left: 1rem; }
+#panel-dezso .pd-log-name::before {   /* tinta-pont az allapothoz */
+  content: ""; position: absolute; left: 0; top: .35em; width: 9px; height: 9px; border-radius: 50%;
+  background: var(--p-blue); box-shadow: 0 0 0 2px rgba(30,77,116,.18);
+}
+#panel-dezso .pd-log-row.is-down .pd-log-name { color: var(--p-warn); }
+#panel-dezso .pd-log-row.is-down .pd-log-name::before { background: var(--p-warn); box-shadow: 0 0 0 2px rgba(178,58,6,.2); }
+#panel-dezso .pd-log-dots { flex: 1; border-bottom: 1px dotted rgba(74,74,64,.5); transform: translateY(-.2em); }
+#panel-dezso .pd-log-val { font-family: var(--p-mono); font-size: .82rem; color: var(--p-ink2); font-variant-numeric: tabular-nums; }
+#panel-dezso .pd-log-row.is-up .pd-log-val::before { content: "REG "; color: var(--p-blue); font-weight: 700; }
+#panel-dezso .pd-log-row.is-down .pd-log-val { color: var(--p-warn); font-weight: 700; }
+
+/* --- footer --- */
+#panel-dezso .pd-foot { border-top: 2px solid var(--p-metal2); padding-top: .9rem; }
+#panel-dezso .pd-foot-note { margin: 0; color: var(--p-ink2); font-size: .78rem; line-height: 1.6; max-width: 64ch; }
+#panel-dezso .pd-foot-quip { margin: .55rem 0 0; color: var(--p-ink2); font-style: italic; font-size: .8rem; opacity: .85; }
+
+/* --- mobil 390px --- */
+@container (max-width: 440px) {
+  #panel-dezso .pd-gauges { grid-template-columns: 1fr; }
+  #panel-dezso .pd-counters { grid-template-columns: 1fr 1fr; }
+  #panel-dezso .pd-title { font-size: clamp(1.7rem, 13cqi, 2.4rem); }
+}
+
+/* --- reduced motion: a tuk BEALLNAK az ertekre (nincs tullendules), nincs canvas-anim --- */
+@media (prefers-reduced-motion: reduce) {
+  #panel-dezso .pd-gauge-needle-grp { transition: none; }
+}

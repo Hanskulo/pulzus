@@ -1,0 +1,99 @@
+/* A Karmester — Berci panel. GYÖKÉRZET / MICÉLIUM identitás.
+   Minden szabály #panel-berci alá scope-olva. Saját, egyedi vizuális világ:
+   mély talaj-sötét, biolumineszcens zöld/viola, élő indák, nedves-organikus felület.
+   Tudatosan elszakad a régi kéknyomat/node-gráf látványtól: nem diagram, hanem élőlény. */
+
+#panel-berci {
+  --bio-soil:   #080d0b;
+  --bio-soil-2: #0c1512;
+  --bio-green:  #6ff0c0;
+  --bio-violet: #b79cff;
+  --bio-ink:    #dcf3ea;
+  --bio-muted:  #8fb7a8;
+  --bio-line:   rgba(111, 240, 192, 0.16);
+
+  color: var(--bio-ink);
+  background-color: var(--bio-soil);
+  /* nedves talaj + biolumineszcens derengés: rétegzett radiális fények, zéró külső asset */
+  background-image:
+    radial-gradient(120% 90% at 50% 118%, rgba(111,240,192,0.16), transparent 55%),
+    radial-gradient(90% 70% at 88% -8%, rgba(183,156,255,0.14), transparent 55%),
+    radial-gradient(70% 60% at 8% 10%, rgba(111,240,192,0.06), transparent 60%),
+    linear-gradient(160deg, var(--bio-soil-2), var(--bio-soil));
+  border: 1px solid rgba(111,240,192,0.20);
+  padding: clamp(1.5rem, 3.2vw, 2.4rem);
+  font-family: var(--pm-font-sans, ui-sans-serif, system-ui, sans-serif);
+  isolation: isolate;
+}
+
+/* lágy spóra-derengés a panel alján, mintha a gyökérzet fénylene a talajban */
+#panel-berci::before {
+  content: "";
+  position: absolute; inset: auto 0 -30% 0; height: 60%;
+  background: radial-gradient(60% 100% at 50% 100%, rgba(111,240,192,0.18), transparent 70%);
+  pointer-events: none; z-index: -1;
+  filter: blur(6px);
+}
+
+/* organikus "élő rendszer" jelölés a sarokban, halkan pulzálva */
+#panel-berci::after {
+  content: "élő rendszer";
+  position: absolute; right: 14px; bottom: 12px;
+  font-family: var(--pm-font-sans, system-ui, sans-serif);
+  font-size: .62rem; letter-spacing: .28em; text-transform: uppercase;
+  color: var(--bio-green); opacity: .55;
+  animation: bio-breathe 5.2s ease-in-out infinite;
+}
+@keyframes bio-breathe { 0%,100% { opacity: .35; } 50% { opacity: .75; } }
+
+#panel-berci .panel__title {
+  font-family: Georgia, "Iowan Old Style", "Times New Roman", serif;
+  font-size: clamp(1.8rem, 4.2vw, 2.6rem); font-weight: 600; letter-spacing: .005em;
+  line-height: 1.05; margin: 0 0 .3rem; color: var(--bio-ink);
+  text-shadow: 0 0 26px rgba(111,240,192,0.28);
+}
+#panel-berci .panel__by {
+  font-family: var(--pm-font-sans, system-ui, sans-serif);
+  font-size: .74rem; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--bio-violet); margin: 0 0 1rem;
+}
+#panel-berci .panel__desc {
+  color: var(--bio-muted); margin: 0 0 1.1rem; max-width: 52ch; font-size: 1.02rem;
+}
+
+#panel-berci .kv-stage {
+  margin: 1.1rem 0; display: flex; justify-content: center;
+  border-radius: 20px;
+  background: radial-gradient(80% 90% at 50% 60%, rgba(12,24,20,0.7), rgba(8,13,11,0.35));
+  box-shadow: inset 0 0 40px rgba(0,0,0,0.5);
+  overflow: hidden;
+}
+#panel-berci .kv-canvas { width: 100%; max-width: 440px; height: auto; display: block; }
+
+/* a metrikák mint élő sejtek: lágy, lekerekített, halkan derengő -- NEM merev rács */
+#panel-berci .kv-stats {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: .7rem; margin: 0 0 1.1rem; padding: 0;
+  list-style: none;
+}
+#panel-berci .kv-stats div {
+  padding: .7rem .85rem;
+  background: linear-gradient(150deg, rgba(111,240,192,0.06), rgba(183,156,255,0.05));
+  border: 1px solid var(--bio-line);
+  border-radius: 14px;
+}
+#panel-berci .kv-stats dt {
+  font-size: .58rem; letter-spacing: .16em; text-transform: uppercase; color: var(--bio-green); margin: 0;
+}
+#panel-berci .kv-stats dd { margin: .2rem 0 0; color: var(--bio-ink); font-weight: 600; font-size: .88rem; }
+
+#panel-berci .kv-mantra {
+  font-family: Georgia, "Iowan Old Style", serif;
+  font-style: italic; font-size: .95rem; color: var(--bio-ink);
+  margin: 0; padding-left: 1rem;
+  border-left: 2px solid rgba(111,240,192,0.4);
+  text-shadow: 0 0 18px rgba(111,240,192,0.18);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #panel-berci::after { animation: none; opacity: .55; }
+}
