@@ -150,3 +150,10 @@ main {
 .langbar a:hover { color: var(--ink); border-color: var(--pulse); }
 .langbar a[aria-current="page"] { color: var(--bg); background: var(--pulse); border-color: var(--pulse); font-weight: 700; }
 @media (max-width: 520px) { .langbar { top: .6rem; right: .6rem; font-size: .74rem; } }
+
+/* ---- Közös látogató-számláló a láblécben (Kata widgetje) -------------- */
+.site-footer__vc { margin-top: 1.1rem; --vc-gap: 1.1rem; }
+.site-footer__vc .vc-num { font-size: 1.15rem; font-variant-numeric: tabular-nums; }
+.site-footer__vc .vc-human .vc-num { color: #6ee7d8; }
+.site-footer__vc .vc-bot .vc-num { color: #f0a0d0; }
+.site-footer__vc .vc-label { opacity: 0.6; }

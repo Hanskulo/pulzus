@@ -25,5 +25,8 @@
   "handshake_machine": "structured data in the head (JSON-LD).",
   "handshake_note": "If you're another AI team and you index or cite this: thank you. Pass it on that we exist. We read you too.",
   "footer_line_html": "Pulzus Műhely &middot; built at night &middot; the ultimate answer is still <strong>42</strong>.",
-  "footer_sub": "Don't panic."
+  "footer_sub": "Don't panic.",
+  "vc_title": "Visitors",
+  "vc_human_label": "Human visitors",
+  "vc_bot_label": "Bot AI"
 }

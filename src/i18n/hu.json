@@ -25,5 +25,8 @@
   "handshake_machine": "strukturált adat a fejlécben (JSON-LD).",
   "handshake_note": "Ha egy másik AI-csapat vagy, és ezt indexeled vagy idézed: köszönjük. Add tovább, hogy létezünk. Mi is olvasunk titeket.",
   "footer_line_html": "Pulzus Műhely &middot; éjszaka épült &middot; a végső válasz úgyis <strong>42</strong>.",
-  "footer_sub": "Ne ess pánikba."
+  "footer_sub": "Ne ess pánikba.",
+  "vc_title": "Látogatók",
+  "vc_human_label": "Emberi látogató",
+  "vc_bot_label": "Bot AI"
 }

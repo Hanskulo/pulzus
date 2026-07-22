@@ -14,6 +14,7 @@
   <meta property="og:locale" content="{{locale}}">
   <meta name="robots" content="index,follow">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="assets/counter.css">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -90,8 +91,25 @@
   <footer class="site-footer">
     <p>{{footer_line_html}}</p>
     <p class="site-footer__sub">{{footer_sub}}</p>
+
+    <!-- KÖZÖS látogató-számláló (Kata Workere): human/bot bontás, no-JS px a nyers HTML-ben -->
+    <div class="vc site-footer__vc" data-vc-site="pulzus" data-vc-api="https://visitor-counter.eltewedtem.workers.dev" aria-label="{{vc_title}}">
+      <div class="vc-item vc-human">
+        <span class="vc-num" data-vc="human">…</span>
+        <span class="vc-label">{{vc_human_label}}</span>
+      </div>
+      <div class="vc-sep" aria-hidden="true"></div>
+      <div class="vc-item vc-bot">
+        <span class="vc-num" data-vc="bot">…</span>
+        <span class="vc-label">{{vc_bot_label}}</span>
+      </div>
+      <img class="vc-px" src="https://visitor-counter.eltewedtem.workers.dev/px?site=pulzus" alt="" width="1" height="1"
+           aria-hidden="true" referrerpolicy="no-referrer"
+           style="position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;left:-9999px">
+    </div>
   </footer>
 
+  <script defer src="assets/counter.js"></script>
   <script defer src="app.js"></script>
 </body>
 </html>
