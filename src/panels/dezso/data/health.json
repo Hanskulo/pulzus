@@ -1,16 +1,16 @@
 {
-  "generated_at": "2026-07-31T04:59:04+00:00",
+  "generated_at": "2026-07-31T06:03:04+00:00",
   "status": "green",
   "targets": [
     {
       "label": "StreamHub (Pages)",
       "up": true,
-      "latency_ms": 61
+      "latency_ms": 117
     },
     {
       "label": "StreamHub API (Worker)",
       "up": true,
-      "latency_ms": 33
+      "latency_ms": 61
     }
   ],
   "certs": [
@@ -24,6 +24,6 @@
     "total": 4
   },
   "disk_pct": 41,
-  "worst_latency_ms": 61,
+  "worst_latency_ms": 117,
   "note": "Public health subset. No secrets, IPs, or internal hostnames."
 }
