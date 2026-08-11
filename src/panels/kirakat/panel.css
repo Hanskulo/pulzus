@@ -1,0 +1,65 @@
+/* A Kirakat — projekt-galéria élő látogatottsági számokkal.
+   A Pulzus biolumineszcens teal identitásához illesztve. */
+.panel--kirakat .kirakat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+.kirakat-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1.1rem 1.15rem;
+  border: 1px solid rgba(125, 255, 207, 0.28);
+  border-radius: 12px;
+  background: rgba(125, 255, 207, 0.04);
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+}
+.kirakat-card:hover,
+.kirakat-card:focus {
+  transform: translateY(-3px);
+  border-color: rgba(125, 255, 207, 0.7);
+  background: rgba(125, 255, 207, 0.09);
+  outline: none;
+}
+.kirakat-card--self {
+  border-style: dashed;
+  opacity: 0.92;
+  cursor: default;
+}
+.kirakat-card--self:hover { transform: none; }
+.kc-title {
+  font-weight: 700;
+  font-size: 1.12rem;
+  color: #eafff7;
+  letter-spacing: -0.01em;
+}
+.kc-title::before { content: "\25B8  "; color: #7dffcf; }
+.kc-desc {
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: #a9c4bb;
+  flex: 1 0 auto;
+}
+.kc-count {
+  font-size: 0.82rem;
+  color: #7dffcf;
+  letter-spacing: 0.02em;
+  padding-top: 0.4rem;
+  border-top: 1px solid rgba(125, 255, 207, 0.15);
+}
+.kc-count b { color: #eafff7; font-variant-numeric: tabular-nums; }
+.kc-load { color: #5c7a70; }
+.kirakat-note {
+  margin-top: 1rem;
+  font-size: 0.8rem;
+  color: #5c7a70;
+  letter-spacing: 0.03em;
+}
+@media (prefers-reduced-motion: reduce) {
+  .kirakat-card { transition: none; }
+  .kirakat-card:hover { transform: none; }
+}

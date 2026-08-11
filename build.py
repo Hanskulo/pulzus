@@ -20,7 +20,7 @@ SRC = os.path.join(ROOT, "src")
 DIST = os.path.join(ROOT, "dist")
 
 SITE_URL = "https://hanskulo.github.io/pulzus/"
-PANELS = ["kata", "dezso", "pixelmano", "berci"]   # megjelenítési sorrend
+PANELS = ["kata", "dezso", "pixelmano", "berci", "kirakat"]   # megjelenítési sorrend
 LANGS = ["hu", "en", "de"]
 DEFAULT = "hu"
 # lang -> kimeneti fájlnév és publikus URL
